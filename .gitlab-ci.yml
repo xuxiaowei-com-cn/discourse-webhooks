@@ -6,5 +6,23 @@ deploy:
   script:
     - make
     - ls -lah
+    - |
+      cat << EOF > /usr/lib/systemd/system/discourse-webhooks.service
+      [Unit]
+      Description=
+      After=network.target
+      [Service]
+      ExecStart=/srv/discourse-webhooks --port=61122
+      Restart=always
+      RestartSec=10s
+      [Install]
+      WantedBy=multi-user.target
+      EOF
+    - systemctl daemon-reload
+    - systemctl enable discourse-webhooks.service
+    - systemctl restart discourse-webhooks.service
+    - systemctl status discourse-webhooks --no-pager -l
+    - sleep 10
+    - systemctl status discourse-webhooks --no-pager -l
   tags:
     - aliyun-hk
