@@ -116,11 +116,10 @@ func webhookHandler(w http.ResponseWriter, r *http.Request, secret string) {
 	}
 
 	// 验证签名
-	webhookSecret := os.Getenv("WEBHOOK_SECRET")
-	if webhookSecret != "" {
+	if secret != "" {
 
 		// 计算 HMAC-SHA256 签名
-		h := hmac.New(sha256.New, []byte(webhookSecret))
+		h := hmac.New(sha256.New, []byte(secret))
 		h.Write(body)
 		expectedSignature := "sha256=" + hex.EncodeToString(h.Sum(nil))
 
@@ -199,6 +198,12 @@ func webhookHandler(w http.ResponseWriter, r *http.Request, secret string) {
 // 4. 解析并验证响应
 // 5. 记录发送结果日志
 func sendWeChatWorkWebhook(eventId, eventType string, user event.User, key string) error {
+	// 检查是否为测试环境，如果是则不实际发送请求
+	if os.Getenv("TEST_MODE") == "true" {
+		log.Printf("%s: Test mode enabled, skipping WeChat Work webhook send", eventId)
+		return nil
+	}
+
 	// 使用动态 key 构建企业微信 Webhook 地址
 	webhookURL := fmt.Sprintf("https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=%s", key)
 
@@ -259,7 +264,7 @@ func sendWeChatWorkWebhook(eventId, eventType string, user event.User, key strin
 
 	// errcode 不为 0 表示失败
 	log.Printf("%s: WeChat Work webhook sent failed, response: %s", eventId, string(respBody))
-	return fmt.Errorf(string(respBody))
+	return fmt.Errorf("%s", string(respBody))
 }
 
 // StartCommand 启动 HTTP 服务器
