@@ -1,18 +1,5 @@
 stages:
-  - build
   - deploy
-
-build:
-  stage: build
-  image: $BUILD_IMAGE
-  variables:
-    BUILD_IMAGE: registry.cn-qingdao.aliyuncs.com/xuxiaoweicomcn/golang:1.25.4
-    GOPROXY: https://goproxy.cn,direct
-  script:
-    - make
-    - ls -lah
-  tags:
-    - 911k-docker
 
 deploy:
   stage: deploy
