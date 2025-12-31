@@ -9,7 +9,7 @@ build:
     BUILD_IMAGE: registry.cn-qingdao.aliyuncs.com/xuxiaoweicomcn/golang:1.25.4
     GOPROXY: https://goproxy.cn,direct
   script:
-    - go build
+    - make
     - ls -lah
   tags:
     - 911k-docker
@@ -17,7 +17,7 @@ build:
 deploy:
   stage: deploy
   script:
-    - go build
+    - make
     - ls -lah
   tags:
     - aliyun-hk
