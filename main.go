@@ -297,7 +297,7 @@ func main() {
 				Name:        "port",
 				Aliases:     []string{"p"},
 				Usage:       "HTTP 端口",
-				DefaultText: "",
+				DefaultText: "8080",
 				Required:    false,
 			},
 			&cli.StringFlag{
