@@ -293,11 +293,11 @@ func main() {
 		Copyright: Copyright,
 		Authors:   Authors,
 		Flags: []cli.Flag{
-			&cli.Int8Flag{
+			&cli.StringFlag{
 				Name:        "port",
 				Aliases:     []string{"p"},
 				Usage:       "HTTP 端口",
-				DefaultText: "8080",
+				DefaultText: "",
 				Required:    false,
 			},
 			&cli.StringFlag{
@@ -308,10 +308,10 @@ func main() {
 				Required:    false,
 			},
 		},
-		Action: func(context context.Context, _ *cli.Command) error {
+		Action: func(_ context.Context, cmd *cli.Command) error {
 			fmt.Println("欢迎使用 Discourse Webhook 企业微信通知服务")
-			var port = context.Value("port").(string)
-			var secret = context.Value("secret").(string)
+			var port = cmd.String("port")
+			var secret = cmd.String("secret")
 			return StartCommand(port, secret)
 		},
 		Metadata: map[string]interface{}{
