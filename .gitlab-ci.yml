@@ -1,5 +1,6 @@
 stages:
   - build
+  - deploy
 
 build:
   stage: build
@@ -9,5 +10,14 @@ build:
     GOPROXY: https://goproxy.cn,direct
   script:
     - go build
+    - ls -lah
   tags:
     - 911k-docker
+
+deploy:
+  stage: deploy
+  script:
+    - go build
+    - ls -lah
+  tags:
+    - aliyun-hk
