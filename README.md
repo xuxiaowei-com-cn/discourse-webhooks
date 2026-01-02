@@ -42,3 +42,11 @@ go build main.go
 # 完整
 make release
 ```
+
+## 实现
+
+| 事件类型 | 事件                   | 进度 | 说明     |
+|------|----------------------|----|--------|
+| ping | ping                 | ✅  | 测试联通性  |
+| user | user_created         | ✅  | 创建用户   |
+| user | user_confirmed_email | ✅  | 用户验证邮箱 |

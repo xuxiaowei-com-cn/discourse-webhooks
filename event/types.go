@@ -33,6 +33,26 @@ type WeChatWorkMessage struct {
 	} `json:"at,omitempty"`
 }
 
+// DingTalkMessage 结构体用于存储钉钉 Webhook 消息格式
+type DingTalkMessage struct {
+	MsgType  string `json:"msgtype"`
+	Markdown struct {
+		Title string `json:"title"`
+		Text  string `json:"text"`
+	} `json:"markdown"`
+	At struct {
+		IsAtAll   bool     `json:"isAtAll"`
+		AtMobiles []string `json:"atMobiles"`
+		AtUserIds []string `json:"atUserIds"`
+	} `json:"at,omitempty"`
+}
+
+// DingTalkResponse 定义钉钉 API 响应结构
+type DingTalkResponse struct {
+	Errcode int    `json:"errcode"`
+	Errmsg  string `json:"errmsg"`
+}
+
 // WeChatWorkResponse 定义企业微信 API 响应结构
 type WeChatWorkResponse struct {
 	Errcode int    `json:"errcode"`
@@ -121,13 +141,4 @@ type User struct {
 	ID       int    `json:"id"`
 	Username string `json:"username"`
 	Email    string `json:"email"`
-}
-
-// WebhookPayload 结构体用于存储 Discourse Webhook 请求的完整负载
-// 该结构体将解析后的请求体组织起来，方便后续处理
-// 字段说明：
-// - User: 用户信息
-
-type WebhookPayload struct {
-	User User `json:"user"`
 }

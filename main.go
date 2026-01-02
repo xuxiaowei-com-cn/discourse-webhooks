@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"crypto/hmac"
 	"crypto/sha256"
@@ -13,10 +12,12 @@ import (
 	"net/http"
 	"os"
 	"runtime"
+	"strings"
 	"time"
 
 	"github.com/urfave/cli/v3"
 	"github.com/xuxiaowei-com-cn/discourse-webhooks/event"
+	"github.com/xuxiaowei-com-cn/discourse-webhooks/notification"
 )
 
 const (
@@ -38,13 +39,36 @@ var (
 	CiPipelineUrl = ""
 )
 
+func getSender(platform string) (notification.Sender, error) {
+	switch platform {
+	case "wechat_work", "企业微信":
+		return &notification.WeChatWorkSender{}, nil
+	case "dingtalk", "钉钉":
+		return &notification.DingTalkSender{}, nil
+	default:
+		return nil, fmt.Errorf("unsupported platform: %s", platform)
+	}
+}
+
+func respErr(w http.ResponseWriter, discourse *event.Discourse, err error) {
+	log.Printf("%s: Failed to send webhook: %v", discourse.EventId, err)
+	// 设置响应头 Content-Type 为 application/json
+	w.Header().Set("Content-Type", "application/json")
+	// 在响应头中添加 EventId
+	w.Header().Set("X-Event-Id", discourse.EventId)
+	// 返回 500 Internal Server Error 响应
+	w.WriteHeader(http.StatusInternalServerError)
+	// 写入 JSON 响应，包含错误信息
+	w.Write([]byte(fmt.Sprintf(`%v`, err)))
+}
+
 // webhookHandler 处理 Discourse 发送的 Webhook 请求
 // 参数：
 // - w: http.ResponseWriter，用于向客户端返回响应
 // - r: *http.Request，包含客户端发送的请求信息
 // 功能：
 // 1. 验证请求方法是否为 POST
-// 2. 解析 URL 路径获取企业微信 Webhook key
+// 2. 解析 URL 路径获取平台和 Key
 // 3. 解析 Discourse 特定的请求头信息
 // 4. 读取并记录请求体
 // 5. 解析请求体中的用户数据
@@ -56,14 +80,34 @@ func webhookHandler(w http.ResponseWriter, r *http.Request, secret string) {
 		return
 	}
 
-	// 从 URL 路径中提取企业微信 Webhook key
-	// 路径格式：/webhook/{key}
+	// 解析 URL 路径
+	// 格式1：/webhook/{key} (默认企业微信)
+	// 格式2：/webhook/{platform}/{key}
 	path := r.URL.Path
-	// 去除前缀 "/webhook/"，得到 key
-	key := path[len("/webhook/"):]
-	// 如果 key 为空，返回 400 Bad Request
+	parts := strings.Split(path, "/")
+
+	var platform string
+	var key string
+
+	if len(parts) == 4 {
+		// /webhook/{platform}/{key}
+		// /webhook/wechat_work/{key}
+		// /webhook/dingtalk/{key}
+		platform = parts[2]
+		key = parts[3]
+	} else {
+		http.Error(w, "Bad request: invalid path", http.StatusBadRequest)
+		return
+	}
+
 	if key == "" {
 		http.Error(w, "Bad request: missing webhook key", http.StatusBadRequest)
+		return
+	}
+
+	sender, err := getSender(platform)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Bad request: %v", err), http.StatusBadRequest)
 		return
 	}
 
@@ -142,32 +186,49 @@ func webhookHandler(w http.ResponseWriter, r *http.Request, secret string) {
 	// 将完整的请求体记录到日志
 	log.Printf("%s: Full Payload: %s", discourse.EventId, string(body))
 
-	// 解析请求体中的用户数据
-	var payload event.WebhookPayload
-	if err := json.Unmarshal(body, &payload); err != nil {
-		log.Printf("%s: Error unmarshaling webhook payload: %v", discourse.EventId, err)
+	// 将 body 处理为 map，根据 EventType 获取 map 中的数据并输出到日志中
+	var genericPayload map[string]interface{}
+	if err := json.Unmarshal(body, &genericPayload); err != nil {
+		log.Printf("%s: Error unmarshaling body to map: %v", discourse.EventId, err)
+		http.Error(w, "Error unmarshaling body to map", http.StatusBadRequest)
+		return
+	}
+
+	var dataBytes interface{}
+	var dataJsonBytes []byte
+	if data, ok := genericPayload[discourse.EventType]; ok {
+		dataBytes = data
+		dataJsonBytes, _ = json.Marshal(data)
+		log.Printf("%s: Event data for type '%s': %s", discourse.EventId, discourse.EventType, dataBytes)
 	} else {
-		// 用户
-		if discourse.EventType == "user" {
-			// 处理用户相关事件
-			switch discourse.Event {
-			case "user_created", "user_confirmed_email":
-				// 记录日志
-				log.Printf("%s: Processing %s event - User ID: %d, Username: %s, Email: %s",
-					discourse.EventId, discourse.Event, payload.User.ID, payload.User.Username, payload.User.Email)
-				// 发送企业微信 Webhook 消息，传递从 URL 提取的 key
-				if err := sendWeChatWorkWebhook(discourse.EventId, discourse.Event, payload.User, key); err != nil {
-					log.Printf("%s: Failed to send WeChat Work webhook: %v", discourse.EventId, err)
-					// 设置响应头 Content-Type 为 application/json
-					w.Header().Set("Content-Type", "application/json")
-					// 在响应头中添加 EventId
-					w.Header().Set("X-Event-Id", discourse.EventId)
-					// 返回 500 Internal Server Error 响应
-					w.WriteHeader(http.StatusInternalServerError)
-					// 写入 JSON 响应，包含错误信息
-					w.Write([]byte(fmt.Sprintf(`%v`, err)))
-					return
-				}
+		log.Printf("%s: Event data: %v", discourse.EventId, genericPayload)
+	}
+
+	if discourse.EventType == "ping" {
+		// ping
+
+		// 发送 Webhook 消息
+		if err := sender.Ping(discourse.EventId, discourse.EventType, dataBytes, key); err != nil {
+			respErr(w, discourse, err)
+			return
+		}
+	} else if discourse.EventType == "user" {
+
+		// 解析请求体中的用户数据
+		var user event.User
+		if err := json.Unmarshal(dataJsonBytes, &user); err != nil {
+			log.Printf("%s: Error unmarshaling webhook payload: %v", discourse.EventId, err)
+			http.Error(w, "Error unmarshaling webhook payload", http.StatusBadRequest)
+			return
+		}
+
+		// 用户事件
+		switch discourse.Event {
+		case "user_created", "user_confirmed_email":
+			// 发送 Webhook 消息
+			if err := sender.SendUser(discourse.EventId, discourse.Event, user, key); err != nil {
+				respErr(w, discourse, err)
+				return
 			}
 		}
 	}
@@ -183,92 +244,8 @@ func webhookHandler(w http.ResponseWriter, r *http.Request, secret string) {
 	w.Write([]byte("ok"))
 }
 
-// sendWeChatWorkWebhook 发送企业微信 Webhook 消息
-// 参数：
-// - eventId: Webhook 事件 ID
-// - eventType: 事件类型（如 user_created、user_confirmed_email 等）
-// - user: 用户信息，包含 ID、用户名和邮箱
-// - key: 企业微信 Webhook key，用于构建 Webhook URL
-// 返回值：
-// - error: 发送过程中出现的错误，如果成功则返回 nil
-// 功能：
-// 1. 构建 Markdown 格式的消息内容
-// 2. 使用动态 key 构建企业微信 Webhook 地址
-// 3. 发送 POST 请求到企业微信 Webhook 地址
-// 4. 解析并验证响应
-// 5. 记录发送结果日志
-func sendWeChatWorkWebhook(eventId, eventType string, user event.User, key string) error {
-	// 检查是否为测试环境，如果是则不实际发送请求
-	if os.Getenv("TEST_MODE") == "true" {
-		log.Printf("%s: Test mode enabled, skipping WeChat Work webhook send", eventId)
-		return nil
-	}
-
-	// 使用动态 key 构建企业微信 Webhook 地址
-	webhookURL := fmt.Sprintf("https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=%s", key)
-
-	// 获取中文事件类型
-	chineseEventType, ok := event.TypeChineseMap[event.Type(eventType)]
-	if !ok {
-		// 如果没有找到对应的中文映射，使用英文原事件类型
-		chineseEventType = eventType
-	}
-
-	// 构建 Markdown 消息内容
-	message := event.WeChatWorkMessage{
-		MsgType: "markdown",
-	}
-
-	message.Markdown.Content = fmt.Sprintf("### Discourse %s 事件通知\n"+
-		"> **事件 ID**: %s\n"+
-		"> **用户 ID**: %d\n"+
-		"> **用户名**: %s\n"+
-		"> **邮箱**: %s\n",
-		chineseEventType, eventId, user.ID, user.Username, user.Email)
-
-	// 将消息转换为 JSON 格式
-	msgBytes, err := json.Marshal(message)
-	if err != nil {
-		log.Printf("%s: Error marshaling WeChat Work message: %v", eventId, err)
-		return err
-	}
-
-	// 发送 POST 请求到企业微信 Webhook 地址
-	resp, err := http.Post(webhookURL, "application/json", bytes.NewBuffer(msgBytes))
-	if err != nil {
-		log.Printf("%s: Error sending WeChat Work webhook: %v", eventId, err)
-		return err
-	}
-	defer resp.Body.Close()
-
-	// 读取响应内容
-	respBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Printf("%s: Error reading WeChat Work webhook response: %v", eventId, err)
-		return err
-	}
-
-	// 解析企业微信 API 响应
-	var weChatResp event.WeChatWorkResponse
-	if err := json.Unmarshal(respBody, &weChatResp); err != nil {
-		log.Printf("%s: Error parsing WeChat Work webhook response: %v, raw response: %s", eventId, err, string(respBody))
-		return err
-	}
-
-	// 验证响应状态
-	if weChatResp.Errcode == 0 {
-		// errcode 为 0 表示成功
-		log.Printf("%s: WeChat Work webhook sent successfully, response: %s", eventId, string(respBody))
-		return nil
-	}
-
-	// errcode 不为 0 表示失败
-	log.Printf("%s: WeChat Work webhook sent failed, response: %s", eventId, string(respBody))
-	return fmt.Errorf("%s", string(respBody))
-}
-
 // StartCommand 启动 HTTP 服务器
-func StartCommand(port string, secret string) error {
+func StartCommand(port int, secret string) error {
 	// 设置日志格式，包含标准时间戳和文件名行号
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
@@ -278,7 +255,7 @@ func StartCommand(port string, secret string) error {
 	})
 
 	// 构建服务器地址，格式为 ":端口号"
-	address := fmt.Sprintf(":%s", port)
+	address := fmt.Sprintf(":%d", port)
 	// 记录服务器启动日志
 	log.Printf("Starting server on %s", address)
 	// 启动 HTTP 服务器，监听指定地址
@@ -298,24 +275,24 @@ func main() {
 		Copyright: Copyright,
 		Authors:   Authors,
 		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:        "port",
-				Aliases:     []string{"p"},
-				Usage:       "HTTP 端口",
-				DefaultText: "8080",
-				Required:    false,
+			&cli.IntFlag{
+				Name:     "port",
+				Aliases:  []string{"p"},
+				Usage:    "HTTP 端口",
+				Value:    8080,
+				Required: false,
 			},
 			&cli.StringFlag{
-				Name:        "secret",
-				Aliases:     []string{"s"},
-				Usage:       "HTTP HMAC-SHA256 签名密钥。为空代表不验证签名。",
-				DefaultText: "",
-				Required:    false,
+				Name:     "secret",
+				Aliases:  []string{"s"},
+				Usage:    "HTTP HMAC-SHA256 签名密钥。为空代表不验证签名。",
+				Value:    "",
+				Required: false,
 			},
 		},
 		Action: func(_ context.Context, cmd *cli.Command) error {
 			fmt.Println("欢迎使用 Discourse Webhook 企业微信通知服务")
-			var port = cmd.String("port")
+			var port = cmd.Int("port")
 			var secret = cmd.String("secret")
 			return StartCommand(port, secret)
 		},
