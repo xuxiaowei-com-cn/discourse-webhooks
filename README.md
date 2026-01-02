@@ -45,8 +45,12 @@ make release
 
 ## 实现
 
-| 事件类型 | 事件                   | 进度 | 说明     |
-|------|----------------------|----|--------|
-| ping | ping                 | ✅  | 测试联通性  |
-| user | user_created         | ✅  | 创建用户   |
-| user | user_confirmed_email | ✅  | 用户验证邮箱 |
+| 事件类型  | 事件                   | 进度 | 说明     |
+|-------|----------------------|----|--------|
+| ping  | ping                 | ✅  | 测试联通性  |
+| user  | user_created         | ✅  | 创建用户   |
+| user  | user_confirmed_email | ✅  | 用户验证邮箱 |
+| topic | topic_created        |    | 话题名字创建 |
+| topic | topic_edited         |    | 话题名字修改 |
+| post  | post_created         |    | 帖子内容创建 |
+| post  | post_edited          |    | 帖子内容修改 |

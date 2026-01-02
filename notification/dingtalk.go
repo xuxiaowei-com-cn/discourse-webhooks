@@ -6,12 +6,22 @@ import (
 
 type DingTalkSender struct{}
 
-func (s *DingTalkSender) Ping(eventId string, eventType string, ping interface{}, key string) error {
+func (d DingTalkSender) Ping(discourse event.Discourse, ping interface{}, key string) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s *DingTalkSender) SendUser(eventId string, eventType string, user event.User, key string) error {
+func (d DingTalkSender) SendUser(discourse event.Discourse, user event.User, key string) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (d DingTalkSender) SendTopic(discourse event.Discourse, topic event.Topic, key string) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (d DingTalkSender) SendPost(discourse event.Discourse, post event.Post, key string) error {
 	//TODO implement me
 	panic("implement me")
 }

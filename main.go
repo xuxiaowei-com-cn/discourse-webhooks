@@ -208,7 +208,7 @@ func webhookHandler(w http.ResponseWriter, r *http.Request, secret string) {
 		// ping
 
 		// 发送 Webhook 消息
-		if err := sender.Ping(discourse.EventId, discourse.EventType, dataBytes, key); err != nil {
+		if err := sender.Ping(*discourse, dataBytes, key); err != nil {
 			respErr(w, discourse, err)
 			return
 		}
@@ -226,7 +226,45 @@ func webhookHandler(w http.ResponseWriter, r *http.Request, secret string) {
 		switch discourse.Event {
 		case "user_created", "user_confirmed_email":
 			// 发送 Webhook 消息
-			if err := sender.SendUser(discourse.EventId, discourse.Event, user, key); err != nil {
+			if err := sender.SendUser(*discourse, user, key); err != nil {
+				respErr(w, discourse, err)
+				return
+			}
+		}
+	} else if discourse.EventType == "topic" {
+
+		// 解析请求体中的话题数据
+		var topic event.Topic
+		if err := json.Unmarshal(dataJsonBytes, &topic); err != nil {
+			log.Printf("%s: Error unmarshaling webhook payload: %v", discourse.EventId, err)
+			http.Error(w, "Error unmarshaling webhook payload", http.StatusBadRequest)
+			return
+		}
+
+		// 话题事件
+		switch discourse.Event {
+		case "topic_created", "topic_edited":
+			// 发送 Webhook 消息
+			if err := sender.SendTopic(*discourse, topic, key); err != nil {
+				respErr(w, discourse, err)
+				return
+			}
+		}
+	} else if discourse.EventType == "post" {
+
+		// 解析请求体中的帖子数据
+		var post event.Post
+		if err := json.Unmarshal(dataJsonBytes, &post); err != nil {
+			log.Printf("%s: Error unmarshaling webhook payload: %v", discourse.EventId, err)
+			http.Error(w, "Error unmarshaling webhook payload", http.StatusBadRequest)
+			return
+		}
+
+		// 帖子事件
+		switch discourse.Event {
+		case "post_created", "post_edited":
+			// 发送 Webhook 消息
+			if err := sender.SendPost(*discourse, post, key); err != nil {
 				respErr(w, discourse, err)
 				return
 			}

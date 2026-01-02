@@ -1,0 +1,7 @@
+{
+  "UserAgent": "Discourse/2025.12.0-latest-80cd66e41fdba5cbc43ca9cc802424030ff9fbef; +https://www.discourse.org/",
+  "Instance": "http://172.25.25.203",
+  "EventId": "49",
+  "EventType": "topic",
+  "Event": "topic_edited"
+}

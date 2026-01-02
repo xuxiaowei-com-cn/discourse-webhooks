@@ -33,3 +33,4 @@ build/
 .vscode/
 
 /discourse-webhooks*
+/main

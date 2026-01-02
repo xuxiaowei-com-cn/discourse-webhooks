@@ -7,12 +7,20 @@ type Type string
 const (
 	UserCreated        Type = "user_created"
 	UserConfirmedEmail Type = "user_confirmed_email"
+	TopicCreated       Type = "topic_created"
+	TopicEdited        Type = "topic_edited"
+	PostCreated        Type = "post_created"
+	PostEdited         Type = "post_edited"
 )
 
 // TypeChineseMap 事件类型到中文的映射
 var TypeChineseMap = map[Type]string{
 	UserCreated:        "用户创建",
 	UserConfirmedEmail: "用户确认邮箱",
+	TopicCreated:       "话题创建",
+	TopicEdited:        "话题编辑",
+	PostCreated:        "帖子创建",
+	PostEdited:         "帖子编辑",
 }
 
 // WeChatWorkMessage 结构体用于存储企业微信 Webhook 消息格式
@@ -141,4 +149,32 @@ type User struct {
 	ID       int    `json:"id"`
 	Username string `json:"username"`
 	Email    string `json:"email"`
+}
+
+// Topic 结构体用于存储 Discourse Webhook 请求中的话题信息
+type Topic struct {
+	ID        int    `json:"id"`
+	Title     string `json:"title"`
+	Slug      string `json:"slug"`
+	CreatedAt string `json:"created_at"`
+	CreatedBy struct {
+		ID             int    `json:"id"`
+		Username       string `json:"username"`
+		AvatarTemplate string `json:"avatar_template"`
+	} `json:"created_by"`
+	CategoryID int `json:"category_id"`
+}
+
+// Post 结构体用于存储 Discourse Webhook 请求中的帖子信息
+type Post struct {
+	ID         int    `json:"id"`
+	Username   string `json:"username"`
+	CreatedAt  string `json:"created_at"`
+	UpdatedAt  string `json:"updated_at"`
+	Raw        string `json:"raw"`
+	Cooked     string `json:"cooked"`
+	TopicID    int    `json:"topic_id"`
+	TopicTitle string `json:"topic_title"`
+	UserID     int    `json:"user_id"`
+	PostURL    string `json:"post_url"`
 }
