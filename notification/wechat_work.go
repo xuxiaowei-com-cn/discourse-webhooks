@@ -3,12 +3,12 @@ package notification
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"html/template"
 	"io"
 	"log"
 	"net/http"
-	"os"
-	"path"
 	"time"
 
 	"github.com/xuxiaowei-com-cn/discourse-webhooks/event"
@@ -25,20 +25,42 @@ var httpClient = &http.Client{
 
 type WeChatWorkSender struct{}
 
-// formatTime 根据系统时区格式化时间字符串
-func formatTime(timeStr string) string {
+// FormatTime 根据系统时区格式化时间字符串
+func FormatTime(args ...interface{}) template.HTML {
+	// 默认时间格式
+	defaultFormat := "2006-01-02 15:04:05 -07:00"
+
+	// 检查参数数量
+	if len(args) < 1 {
+		return ""
+	}
+
+	// 获取时间字符串
+	timeStr, ok := args[0].(string)
+	if !ok {
+		return ""
+	}
+
+	// 获取格式字符串，如果没有提供则使用默认格式
+	format := defaultFormat
+	if len(args) > 1 {
+		if f, ok := args[1].(string); ok {
+			format = f
+		}
+	}
+
 	// 解析ISO 8601格式的时间字符串
 	parsedTime, err := time.Parse(time.RFC3339, timeStr)
 	if err != nil {
 		// 如果解析失败，返回原始时间字符串
-		return timeStr
+		return template.HTML(timeStr)
 	}
 
 	// 转换为系统本地时区
 	localTime := parsedTime.Local()
 
-	// 格式化为易读的时间格式，包含数字时区信息
-	return localTime.Format("2006-01-02 15:04:05 -07:00")
+	// 格式化为指定格式的时间字符串
+	return template.HTML(localTime.Format(format))
 }
 
 // sendWeChatWorkRequest 发送企业微信 webhook 请求并处理响应
@@ -84,159 +106,65 @@ func sendWeChatWorkRequest(eventId, webhookURL string, message event.WeChatWorkM
 	return fmt.Errorf("%s", string(respBody))
 }
 
-func (s *WeChatWorkSender) Ping(discourse event.Discourse, ping interface{}, key string) error {
-	// 检查是否为测试环境，如果是则不实际发送请求
-	if os.Getenv("TEST_MODE") == "true" {
-		log.Printf("%s: Test mode enabled, skipping WeChat Work webhook send", discourse.EventId)
-		return nil
+// renderTemplate 根据模板和数据渲染消息内容
+func renderTemplate(templateContent string, header event.Discourse, data interface{}) (string, error) {
+	// 准备模板渲染所需的数据
+	tmplData := event.TemplateData{
+		Header: header,
 	}
 
-	// 使用动态 key 构建企业微信 Webhook 地址
-	webhookURL := fmt.Sprintf("%s?key=%s", WeChatAPI, key)
+	if header.EventType == "ping" {
+		tmplData.Data = data.(string)
+	} else {
+		// 将 data 转换为 map 以便访问
+		dataMap, ok := data.(map[string]interface{})
+		if !ok {
+			// 如果 data 不是 map，尝试转换为 JSON 再转换为 map
+			jsonData, _ := json.Marshal(data)
+			json.Unmarshal(jsonData, &dataMap)
+		}
 
-	// 构建 Markdown 消息内容
-	message := event.WeChatWorkMessage{
-		MsgType: "markdown",
+		tmplData.Data = dataMap
 	}
 
-	message.Markdown.Content = fmt.Sprintf("### Discourse %s 事件通知\n"+
-		"> **事件 ID**: %s\n"+
-		"> **ping**: %v\n",
-		discourse.EventType, discourse.EventId, ping)
+	// 创建模板并注册 FormatTime 函数
+	tmpl, err := template.New("webhook").Funcs(template.FuncMap{
+		"FormatTime": FormatTime,
+	}).Parse(templateContent)
+	if err != nil {
+		return "", errors.New(fmt.Sprintf("Error parsing template: %v", err))
+	}
 
-	// 调用公共函数发送请求
-	return sendWeChatWorkRequest(discourse.EventId, webhookURL, message)
+	var buf bytes.Buffer
+	if err := tmpl.Execute(&buf, tmplData); err != nil {
+		return "", errors.New(fmt.Sprintf("Error executing template: %v", err))
+	}
+
+	return buf.String(), nil
 }
 
-func (s *WeChatWorkSender) SendUser(discourse event.Discourse, user event.User, key string) error {
-	// 检查是否为测试环境，如果是则不实际发送请求
-	if os.Getenv("TEST_MODE") == "true" {
-		log.Printf("%s: Test mode enabled, skipping WeChat Work webhook send", discourse.EventId)
-		return nil
-	}
-
+func (s *WeChatWorkSender) Send(header event.Discourse, data interface{}, key string) error {
 	// 使用动态 key 构建企业微信 Webhook 地址
 	webhookURL := fmt.Sprintf("%s?key=%s", WeChatAPI, key)
-
-	// 获取中文事件类型
-	chineseEventType, ok := event.TypeChineseMap[event.Type(discourse.Event)]
-	if !ok {
-		// 如果没有找到对应的中文映射，使用英文原事件类型
-		chineseEventType = discourse.EventType
-	}
 
 	// 构建 Markdown 消息内容
 	message := event.WeChatWorkMessage{
 		MsgType: "markdown",
 	}
 
-	message.Markdown.Content = fmt.Sprintf("### Discourse %s 事件通知\n"+
-		"> **事件 ID**: %s\n"+
-		"> **用户 ID**: %d\n"+
-		"> **用户名**: %s\n"+
-		"> **邮箱**: %s\n",
-		chineseEventType, discourse.EventId, user.ID, user.Username, user.Email)
+	templateContent := event.TemplateMap[event.Type(header.Event)]
+
+	if templateContent == "" {
+		return errors.New(fmt.Sprintf("the %s template string was not found", header.Event))
+	}
+
+	var err error
+	// 渲染模板内容
+	message.Markdown.Content, err = renderTemplate(templateContent, header, data)
+	if err != nil {
+		return err
+	}
 
 	// 调用公共函数发送请求
-	return sendWeChatWorkRequest(discourse.EventId, webhookURL, message)
-}
-
-func (s *WeChatWorkSender) SendTopic(discourse event.Discourse, topic event.Topic, key string) error {
-	// 检查是否为测试环境，如果是则不实际发送请求
-	if os.Getenv("TEST_MODE") == "true" {
-		log.Printf("%s: Test mode enabled, skipping WeChat Work webhook send", discourse.EventId)
-		return nil
-	}
-
-	// 使用动态 key 构建企业微信 Webhook 地址
-	webhookURL := fmt.Sprintf("%s?key=%s", WeChatAPI, key)
-
-	// 获取中文事件类型
-	chineseEventType, ok := event.TypeChineseMap[event.Type(discourse.Event)]
-	if !ok {
-		// 如果没有找到对应的中文映射，使用英文原事件类型
-		chineseEventType = discourse.EventType
-	}
-
-	// 构建话题链接
-	topicLink := fmt.Sprintf("%s/t/%d", discourse.Instance, topic.ID)
-
-	// 构建 Markdown 消息内容
-	message := event.WeChatWorkMessage{
-		MsgType: "markdown",
-	}
-
-	userUrl := fmt.Sprintf("%s/u/%s", discourse.Instance, topic.CreatedBy.Username)
-
-	message.Markdown.Content = fmt.Sprintf("### Discourse %s 事件通知\n"+
-		"> **事件 ID**: %s\n"+
-		"> **话题 ID**: %d\n"+
-		"> **话题标题**: %s\n"+
-		"> **话题链接**: [%s](%s)\n"+
-		"> **创建者**: [%s](%s)\n"+
-		"> **创建时间**: %s\n",
-		chineseEventType, discourse.EventId, topic.ID, topic.Title,
-		topicLink, topicLink,
-		topic.CreatedBy.Username, userUrl,
-		formatTime(topic.CreatedAt))
-
-	// 调用公共函数发送请求
-	return sendWeChatWorkRequest(discourse.EventId, webhookURL, message)
-}
-
-func (s *WeChatWorkSender) SendPost(discourse event.Discourse, post event.Post, key string) error {
-	// 检查是否为测试环境，如果是则不实际发送请求
-	if os.Getenv("TEST_MODE") == "true" {
-		log.Printf("%s: Test mode enabled, skipping WeChat Work webhook send", discourse.EventId)
-		return nil
-	}
-
-	// 使用动态 key 构建企业微信 Webhook 地址
-	webhookURL := fmt.Sprintf("%s?key=%s", WeChatAPI, key)
-
-	// 获取中文事件类型
-	chineseEventType, ok := event.TypeChineseMap[event.Type(discourse.Event)]
-	if !ok {
-		// 如果没有找到对应的中文映射，使用英文原事件类型
-		chineseEventType = discourse.EventType
-	}
-
-	// 构建 Markdown 消息内容
-	message := event.WeChatWorkMessage{
-		MsgType: "markdown",
-	}
-
-	// 限制帖子内容长度，避免消息过长
-	content := post.Raw
-	if len(content) > 200 {
-		content = content[:200] + "..."
-	}
-
-	topicLink := fmt.Sprintf("%s/t/%d", discourse.Instance, post.TopicID)
-	fullPostURL := topicLink + "/" + path.Base(post.PostURL)
-	userUrl := fmt.Sprintf("%s/u/%s", discourse.Instance, post.Username)
-
-	message.Markdown.Content = fmt.Sprintf("### Discourse %s 事件通知\n"+
-		"> **事件 ID**: %s\n"+
-		"> **话题 ID**: %d\n"+
-		"> **话题标题**: %s\n"+
-		"> **话题链接**: [%s](%s)\n"+
-		"> **作者**: [%s](%s)\n"+
-		"> **创建时间**: %s\n"+
-		"> **帖子 ID**: %d\n"+
-		"> **帖子内容**: %s\n"+
-		"> **帖子链接**: [%s](%s)\n",
-		chineseEventType,
-		discourse.EventId,
-		post.TopicID,
-		post.TopicTitle,
-		topicLink, topicLink,
-		post.Username, userUrl,
-		formatTime(post.CreatedAt),
-		post.ID,
-		content,
-		fullPostURL, fullPostURL)
-
-	// 调用公共函数发送请求
-	return sendWeChatWorkRequest(discourse.EventId, webhookURL, message)
+	return sendWeChatWorkRequest(header.EventId, webhookURL, message)
 }

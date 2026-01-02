@@ -22,7 +22,7 @@ import (
 
 const (
 	Name       = "discourse-webhooks"
-	Usage      = "Discourse Webhook 企业微信通知服务"
+	Usage      = "Discourse Webhook 通知服务"
 	Copyright  = "徐晓伟工作室 <xuxiaowei@xuxiaowei.com.cn>"
 	ProjectUrl = "github.com/xuxiaowei-com-cn/discourse-webhooks"
 )
@@ -50,16 +50,24 @@ func getSender(platform string) (notification.Sender, error) {
 	}
 }
 
+// respErr 响应错误信息
 func respErr(w http.ResponseWriter, discourse *event.Discourse, err error) {
 	log.Printf("%s: Failed to send webhook: %v", discourse.EventId, err)
 	// 设置响应头 Content-Type 为 application/json
 	w.Header().Set("Content-Type", "application/json")
 	// 在响应头中添加 EventId
 	w.Header().Set("X-Event-Id", discourse.EventId)
-	// 返回 500 Internal Server Error 响应
-	w.WriteHeader(http.StatusInternalServerError)
+
+	if strings.Contains(err.Error(), "not found") {
+		// 返回 404 响应
+		w.WriteHeader(http.StatusNotFound)
+	} else {
+		// 返回 500 Internal Server Error 响应
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+
 	// 写入 JSON 响应，包含错误信息
-	w.Write([]byte(fmt.Sprintf(`%v`, err)))
+	_, _ = w.Write([]byte(fmt.Sprintf(`%v`, err)))
 }
 
 // webhookHandler 处理 Discourse 发送的 Webhook 请求
@@ -81,8 +89,7 @@ func webhookHandler(w http.ResponseWriter, r *http.Request, secret string) {
 	}
 
 	// 解析 URL 路径
-	// 格式1：/webhook/{key} (默认企业微信)
-	// 格式2：/webhook/{platform}/{key}
+	// 格式：/webhook/{platform}/{key}
 	path := r.URL.Path
 	parts := strings.Split(path, "/")
 
@@ -139,14 +146,14 @@ func webhookHandler(w http.ResponseWriter, r *http.Request, secret string) {
 	discourseStr, err := json.Marshal(discourse)
 	if err != nil {
 		// 记录错误日志
-		log.Printf("%s: Error marshaling discourse info: %v", discourse.EventId, err)
+		log.Printf("%s: Error marshaling header: %v", discourse.EventId, err)
 		// 返回 500 Internal Server Error
 		http.Error(w, "Error processing request", http.StatusInternalServerError)
 		return
 	}
 
 	// 将解析后的 Discourse 信息记录到日志
-	log.Printf("%s: Discourse Info: %s", discourse.EventId, string(discourseStr))
+	log.Printf("%s: Header: %s", discourse.EventId, string(discourseStr))
 
 	// 读取请求体内容
 	body, err := io.ReadAll(r.Body)
@@ -184,7 +191,7 @@ func webhookHandler(w http.ResponseWriter, r *http.Request, secret string) {
 	log.Printf("%s: Signature verified successfully", discourse.EventId)
 
 	// 将完整的请求体记录到日志
-	log.Printf("%s: Full Payload: %s", discourse.EventId, string(body))
+	log.Printf("%s: Body: %s", discourse.EventId, string(body))
 
 	// 将 body 处理为 map，根据 EventType 获取 map 中的数据并输出到日志中
 	var genericPayload map[string]interface{}
@@ -194,81 +201,12 @@ func webhookHandler(w http.ResponseWriter, r *http.Request, secret string) {
 		return
 	}
 
-	var dataBytes interface{}
-	var dataJsonBytes []byte
-	if data, ok := genericPayload[discourse.EventType]; ok {
-		dataBytes = data
-		dataJsonBytes, _ = json.Marshal(data)
-		log.Printf("%s: Event data for type '%s': %s", discourse.EventId, discourse.EventType, dataBytes)
-	} else {
-		log.Printf("%s: Event data: %v", discourse.EventId, genericPayload)
-	}
+	data, _ := genericPayload[discourse.EventType]
 
-	if discourse.EventType == "ping" {
-		// ping
-
-		// 发送 Webhook 消息
-		if err := sender.Ping(*discourse, dataBytes, key); err != nil {
-			respErr(w, discourse, err)
-			return
-		}
-	} else if discourse.EventType == "user" {
-
-		// 解析请求体中的用户数据
-		var user event.User
-		if err := json.Unmarshal(dataJsonBytes, &user); err != nil {
-			log.Printf("%s: Error unmarshaling webhook payload: %v", discourse.EventId, err)
-			http.Error(w, "Error unmarshaling webhook payload", http.StatusBadRequest)
-			return
-		}
-
-		// 用户事件
-		switch discourse.Event {
-		case "user_created", "user_confirmed_email":
-			// 发送 Webhook 消息
-			if err := sender.SendUser(*discourse, user, key); err != nil {
-				respErr(w, discourse, err)
-				return
-			}
-		}
-	} else if discourse.EventType == "topic" {
-
-		// 解析请求体中的话题数据
-		var topic event.Topic
-		if err := json.Unmarshal(dataJsonBytes, &topic); err != nil {
-			log.Printf("%s: Error unmarshaling webhook payload: %v", discourse.EventId, err)
-			http.Error(w, "Error unmarshaling webhook payload", http.StatusBadRequest)
-			return
-		}
-
-		// 话题事件
-		switch discourse.Event {
-		case "topic_created", "topic_edited":
-			// 发送 Webhook 消息
-			if err := sender.SendTopic(*discourse, topic, key); err != nil {
-				respErr(w, discourse, err)
-				return
-			}
-		}
-	} else if discourse.EventType == "post" {
-
-		// 解析请求体中的帖子数据
-		var post event.Post
-		if err := json.Unmarshal(dataJsonBytes, &post); err != nil {
-			log.Printf("%s: Error unmarshaling webhook payload: %v", discourse.EventId, err)
-			http.Error(w, "Error unmarshaling webhook payload", http.StatusBadRequest)
-			return
-		}
-
-		// 帖子事件
-		switch discourse.Event {
-		case "post_created", "post_edited":
-			// 发送 Webhook 消息
-			if err := sender.SendPost(*discourse, post, key); err != nil {
-				respErr(w, discourse, err)
-				return
-			}
-		}
+	// 发送 Webhook 消息
+	if err := sender.Send(*discourse, data, key); err != nil {
+		respErr(w, discourse, err)
+		return
 	}
 
 	// 设置响应头 Content-Type 为 application/json
@@ -279,7 +217,7 @@ func webhookHandler(w http.ResponseWriter, r *http.Request, secret string) {
 	// 返回 200 OK 响应
 	w.WriteHeader(http.StatusOK)
 	// 写入 JSON 响应
-	w.Write([]byte("ok"))
+	_, _ = w.Write([]byte("ok"))
 }
 
 // StartCommand 启动 HTTP 服务器
