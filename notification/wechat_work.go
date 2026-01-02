@@ -14,6 +14,15 @@ import (
 	"github.com/xuxiaowei-com-cn/discourse-webhooks/event"
 )
 
+// 定义 HTTP 客户端超时时间
+const httpClientTimeout = 10 * time.Second
+const WeChatAPI = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send"
+
+// 创建带有超时设置的 HTTP 客户端
+var httpClient = &http.Client{
+	Timeout: httpClientTimeout,
+}
+
 type WeChatWorkSender struct{}
 
 // formatTime 根据系统时区格式化时间字符串
@@ -32,6 +41,49 @@ func formatTime(timeStr string) string {
 	return localTime.Format("2006-01-02 15:04:05 -07:00")
 }
 
+// sendWeChatWorkRequest 发送企业微信 webhook 请求并处理响应
+func sendWeChatWorkRequest(eventId, webhookURL string, message event.WeChatWorkMessage) error {
+	// 将消息转换为 JSON 格式
+	msgBytes, err := json.Marshal(message)
+	if err != nil {
+		log.Printf("%s: Error marshaling WeChat Work message: %v", eventId, err)
+		return err
+	}
+
+	// 发送 POST 请求到企业微信 Webhook 地址
+	resp, err := httpClient.Post(webhookURL, "application/json", bytes.NewBuffer(msgBytes))
+	if err != nil {
+		log.Printf("%s: Error sending WeChat Work webhook: %v", eventId, err)
+		return err
+	}
+	defer resp.Body.Close()
+
+	// 读取响应内容
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Printf("%s: Error reading WeChat Work webhook response: %v", eventId, err)
+		return err
+	}
+
+	// 解析企业微信 API 响应
+	var weChatResp event.WeChatWorkResponse
+	if err := json.Unmarshal(respBody, &weChatResp); err != nil {
+		log.Printf("%s: Error parsing WeChat Work webhook response: %v, raw response: %s", eventId, err, string(respBody))
+		return err
+	}
+
+	// 验证响应状态
+	if weChatResp.Errcode == 0 {
+		// errcode 为0表示成功
+		log.Printf("%s: WeChat Work webhook sent successfully, response: %s", eventId, string(respBody))
+		return nil
+	}
+
+	// errcode 不为0表示失败
+	log.Printf("%s: WeChat Work webhook sent failed, response: %s", eventId, string(respBody))
+	return fmt.Errorf("%s", string(respBody))
+}
+
 func (s *WeChatWorkSender) Ping(discourse event.Discourse, ping interface{}, key string) error {
 	// 检查是否为测试环境，如果是则不实际发送请求
 	if os.Getenv("TEST_MODE") == "true" {
@@ -40,7 +92,7 @@ func (s *WeChatWorkSender) Ping(discourse event.Discourse, ping interface{}, key
 	}
 
 	// 使用动态 key 构建企业微信 Webhook 地址
-	webhookURL := fmt.Sprintf("https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=%s", key)
+	webhookURL := fmt.Sprintf("%s?key=%s", WeChatAPI, key)
 
 	// 构建 Markdown 消息内容
 	message := event.WeChatWorkMessage{
@@ -52,45 +104,8 @@ func (s *WeChatWorkSender) Ping(discourse event.Discourse, ping interface{}, key
 		"> **ping**: %v\n",
 		discourse.EventType, discourse.EventId, ping)
 
-	// 将消息转换为 JSON 格式
-	msgBytes, err := json.Marshal(message)
-	if err != nil {
-		log.Printf("%s: Error marshaling WeChat Work message: %v", discourse.EventId, err)
-		return err
-	}
-
-	// 发送 POST 请求到企业微信 Webhook 地址
-	resp, err := http.Post(webhookURL, "application/json", bytes.NewBuffer(msgBytes))
-	if err != nil {
-		log.Printf("%s: Error sending WeChat Work webhook: %v", discourse.EventId, err)
-		return err
-	}
-	defer resp.Body.Close()
-
-	// 读取响应内容
-	respBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Printf("%s: Error reading WeChat Work webhook response: %v", discourse.EventId, err)
-		return err
-	}
-
-	// 解析企业微信 API 响应
-	var weChatResp event.WeChatWorkResponse
-	if err := json.Unmarshal(respBody, &weChatResp); err != nil {
-		log.Printf("%s: Error parsing WeChat Work webhook response: %v, raw response: %s", discourse.EventId, err, string(respBody))
-		return err
-	}
-
-	// 验证响应状态
-	if weChatResp.Errcode == 0 {
-		// errcode 为 0 表示成功
-		log.Printf("%s: WeChat Work webhook sent successfully, response: %s", discourse.EventId, string(respBody))
-		return nil
-	}
-
-	// errcode 不为 0 表示失败
-	log.Printf("%s: WeChat Work webhook sent failed, response: %s", discourse.EventId, string(respBody))
-	return fmt.Errorf("%s", string(respBody))
+	// 调用公共函数发送请求
+	return sendWeChatWorkRequest(discourse.EventId, webhookURL, message)
 }
 
 func (s *WeChatWorkSender) SendUser(discourse event.Discourse, user event.User, key string) error {
@@ -101,7 +116,7 @@ func (s *WeChatWorkSender) SendUser(discourse event.Discourse, user event.User, 
 	}
 
 	// 使用动态 key 构建企业微信 Webhook 地址
-	webhookURL := fmt.Sprintf("https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=%s", key)
+	webhookURL := fmt.Sprintf("%s?key=%s", WeChatAPI, key)
 
 	// 获取中文事件类型
 	chineseEventType, ok := event.TypeChineseMap[event.Type(discourse.Event)]
@@ -122,45 +137,8 @@ func (s *WeChatWorkSender) SendUser(discourse event.Discourse, user event.User, 
 		"> **邮箱**: %s\n",
 		chineseEventType, discourse.EventId, user.ID, user.Username, user.Email)
 
-	// 将消息转换为 JSON 格式
-	msgBytes, err := json.Marshal(message)
-	if err != nil {
-		log.Printf("%s: Error marshaling WeChat Work message: %v", discourse.EventId, err)
-		return err
-	}
-
-	// 发送 POST 请求到企业微信 Webhook 地址
-	resp, err := http.Post(webhookURL, "application/json", bytes.NewBuffer(msgBytes))
-	if err != nil {
-		log.Printf("%s: Error sending WeChat Work webhook: %v", discourse.EventId, err)
-		return err
-	}
-	defer resp.Body.Close()
-
-	// 读取响应内容
-	respBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Printf("%s: Error reading WeChat Work webhook response: %v", discourse.EventId, err)
-		return err
-	}
-
-	// 解析企业微信 API 响应
-	var weChatResp event.WeChatWorkResponse
-	if err := json.Unmarshal(respBody, &weChatResp); err != nil {
-		log.Printf("%s: Error parsing WeChat Work webhook response: %v, raw response: %s", discourse.EventId, err, string(respBody))
-		return err
-	}
-
-	// 验证响应状态
-	if weChatResp.Errcode == 0 {
-		// errcode 为 0 表示成功
-		log.Printf("%s: WeChat Work webhook sent successfully, response: %s", discourse.EventId, string(respBody))
-		return nil
-	}
-
-	// errcode 不为 0 表示失败
-	log.Printf("%s: WeChat Work webhook sent failed, response: %s", discourse.EventId, string(respBody))
-	return fmt.Errorf("%s", string(respBody))
+	// 调用公共函数发送请求
+	return sendWeChatWorkRequest(discourse.EventId, webhookURL, message)
 }
 
 func (s *WeChatWorkSender) SendTopic(discourse event.Discourse, topic event.Topic, key string) error {
@@ -171,7 +149,7 @@ func (s *WeChatWorkSender) SendTopic(discourse event.Discourse, topic event.Topi
 	}
 
 	// 使用动态 key 构建企业微信 Webhook 地址
-	webhookURL := fmt.Sprintf("https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=%s", key)
+	webhookURL := fmt.Sprintf("%s?key=%s", WeChatAPI, key)
 
 	// 获取中文事件类型
 	chineseEventType, ok := event.TypeChineseMap[event.Type(discourse.Event)]
@@ -202,45 +180,8 @@ func (s *WeChatWorkSender) SendTopic(discourse event.Discourse, topic event.Topi
 		topic.CreatedBy.Username, userUrl,
 		formatTime(topic.CreatedAt))
 
-	// 将消息转换为 JSON 格式
-	msgBytes, err := json.Marshal(message)
-	if err != nil {
-		log.Printf("%s: Error marshaling WeChat Work message: %v", discourse.EventId, err)
-		return err
-	}
-
-	// 发送 POST 请求到企业微信 Webhook 地址
-	resp, err := http.Post(webhookURL, "application/json", bytes.NewBuffer(msgBytes))
-	if err != nil {
-		log.Printf("%s: Error sending WeChat Work webhook: %v", discourse.EventId, err)
-		return err
-	}
-	defer resp.Body.Close()
-
-	// 读取响应内容
-	respBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Printf("%s: Error reading WeChat Work webhook response: %v", discourse.EventId, err)
-		return err
-	}
-
-	// 解析企业微信 API 响应
-	var weChatResp event.WeChatWorkResponse
-	if err := json.Unmarshal(respBody, &weChatResp); err != nil {
-		log.Printf("%s: Error parsing WeChat Work webhook response: %v, raw response: %s", discourse.EventId, err, string(respBody))
-		return err
-	}
-
-	// 验证响应状态
-	if weChatResp.Errcode == 0 {
-		// errcode 为 0 表示成功
-		log.Printf("%s: WeChat Work webhook sent successfully, response: %s", discourse.EventId, string(respBody))
-		return nil
-	}
-
-	// errcode 不为 0 表示失败
-	log.Printf("%s: WeChat Work webhook sent failed, response: %s", discourse.EventId, string(respBody))
-	return fmt.Errorf("%s", string(respBody))
+	// 调用公共函数发送请求
+	return sendWeChatWorkRequest(discourse.EventId, webhookURL, message)
 }
 
 func (s *WeChatWorkSender) SendPost(discourse event.Discourse, post event.Post, key string) error {
@@ -251,7 +192,7 @@ func (s *WeChatWorkSender) SendPost(discourse event.Discourse, post event.Post, 
 	}
 
 	// 使用动态 key 构建企业微信 Webhook 地址
-	webhookURL := fmt.Sprintf("https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=%s", key)
+	webhookURL := fmt.Sprintf("%s?key=%s", WeChatAPI, key)
 
 	// 获取中文事件类型
 	chineseEventType, ok := event.TypeChineseMap[event.Type(discourse.Event)]
@@ -296,43 +237,6 @@ func (s *WeChatWorkSender) SendPost(discourse event.Discourse, post event.Post, 
 		content,
 		fullPostURL, fullPostURL)
 
-	// 将消息转换为 JSON 格式
-	msgBytes, err := json.Marshal(message)
-	if err != nil {
-		log.Printf("%s: Error marshaling WeChat Work message: %v", discourse.EventId, err)
-		return err
-	}
-
-	// 发送 POST 请求到企业微信 Webhook 地址
-	resp, err := http.Post(webhookURL, "application/json", bytes.NewBuffer(msgBytes))
-	if err != nil {
-		log.Printf("%s: Error sending WeChat Work webhook: %v", discourse.EventId, err)
-		return err
-	}
-	defer resp.Body.Close()
-
-	// 读取响应内容
-	respBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Printf("%s: Error reading WeChat Work webhook response: %v", discourse.EventId, err)
-		return err
-	}
-
-	// 解析企业微信 API 响应
-	var weChatResp event.WeChatWorkResponse
-	if err := json.Unmarshal(respBody, &weChatResp); err != nil {
-		log.Printf("%s: Error parsing WeChat Work webhook response: %v, raw response: %s", discourse.EventId, err, string(respBody))
-		return err
-	}
-
-	// 验证响应状态
-	if weChatResp.Errcode == 0 {
-		// errcode 为 0 表示成功
-		log.Printf("%s: WeChat Work webhook sent successfully, response: %s", discourse.EventId, string(respBody))
-		return nil
-	}
-
-	// errcode 不为 0 表示失败
-	log.Printf("%s: WeChat Work webhook sent failed, response: %s", discourse.EventId, string(respBody))
-	return fmt.Errorf("%s", string(respBody))
+	// 调用公共函数发送请求
+	return sendWeChatWorkRequest(discourse.EventId, webhookURL, message)
 }
