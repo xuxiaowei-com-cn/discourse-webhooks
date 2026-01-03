@@ -6,7 +6,7 @@ deploy:
   script:
     - make
     - ls -lah
-    - cp discourse-webhooks /srv/discourse-webhooks
+    - mv discourse-webhooks /srv/discourse-webhooks
     - |
       cat << EOF > /usr/lib/systemd/system/discourse-webhooks.service
       [Unit]
