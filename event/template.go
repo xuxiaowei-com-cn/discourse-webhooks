@@ -147,6 +147,24 @@ var TemplateMap = map[Type]string{
 **分数更新时间**: {{FormatTime .Data.post_updated_at}}
 **当前分数**: {{.Data.score}}
 `,
+	ReviewableTransitionedTo: `# Discourse 审核状态转换 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**审核类型**: {{.Data.type}}
+**类型来源**: {{.Data.type_source}}
+**话题链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}]({{.Header.Instance}}/t/{{.Data.topic_id}})
+**目标类型**: {{.Data.target_type}}
+**目标 ID**: {{.Data.target_id}}
+**目标链接**: [{{.Data.target_url}}]({{.Data.target_url}})
+**目标内容**: {{.Data.raw}}
+**目标时间**: {{FormatTime .Data.target_created_at}}
+**目标创建人ID**: {{.Data.target_created_by_id}}
+**审核 ID**: {{.Data.id}}
+**审核创建时间**: {{FormatTime .Data.created_at}}
+**状态转换时间**: {{FormatTime .Data.post_updated_at}}
+**当前状态**: {{.Data.status}}
+`,
 	TopicCreated: `# Discourse 话题创建 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}
