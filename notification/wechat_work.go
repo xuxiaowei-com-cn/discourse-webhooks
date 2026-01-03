@@ -152,7 +152,14 @@ func (s *WeChatWorkSender) Send(header event.Discourse, data interface{}, key st
 		MsgType: "markdown",
 	}
 
-	templateContent := event.TemplateMap[event.Type(header.Event)]
+	var templateContent string
+	if header.EventType == "notification" && header.Event == "notification_created" {
+		dataMap := data.(map[string]interface{})
+		notificationType := fmt.Sprintf("%v", dataMap["notification_type"])
+		templateContent = event.TemplateMap[event.Type(header.Event+notificationType)]
+	} else {
+		templateContent = event.TemplateMap[event.Type(header.Event)]
+	}
 
 	if templateContent == "" {
 		return errors.New(fmt.Sprintf("the %s template string was not found", header.Event))

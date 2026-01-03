@@ -5,18 +5,25 @@ type Type string
 
 // Discourse 事件类型常量
 const (
-	GroupUpdated       Type = "group_updated"
-	Ping               Type = "ping"
-	PostCreated        Type = "post_created"
-	PostDestroyed      Type = "post_destroyed"
-	PostEdited         Type = "post_edited"
-	TopicCreated       Type = "topic_created"
-	TopicEdited        Type = "topic_edited"
-	UserAddedToGroup   Type = "user_added_to_group"
-	UserConfirmedEmail Type = "user_confirmed_email"
-	UserCreated        Type = "user_created"
-	UserLoggedIn       Type = "user_logged_in"
-	UserLoggedOut      Type = "user_logged_out"
+	GroupUpdated           Type = "group_updated"
+	NotificationCreated2   Type = "notification_created2"
+	NotificationCreated6   Type = "notification_created6"
+	NotificationCreated12  Type = "notification_created12"
+	Ping                   Type = "ping"
+	PostCreated            Type = "post_created"
+	PostDestroyed          Type = "post_destroyed"
+	PostEdited             Type = "post_edited"
+	ReviewableCreated      Type = "reviewable_created"
+	ReviewableScoreUpdated Type = "reviewable_score_updated"
+	TopicCreated           Type = "topic_created"
+	TopicEdited            Type = "topic_edited"
+	UserAddedToGroup       Type = "user_added_to_group"
+	UserBadgeGranted       Type = "user_badge_granted"
+	UserConfirmedEmail     Type = "user_confirmed_email"
+	UserCreated            Type = "user_created"
+	UserLoggedIn           Type = "user_logged_in"
+	UserLoggedOut          Type = "user_logged_out"
+	UserUpdated            Type = "user_updated"
 )
 
 // WeChatWorkMessage 结构体用于存储企业微信 Webhook 消息格式

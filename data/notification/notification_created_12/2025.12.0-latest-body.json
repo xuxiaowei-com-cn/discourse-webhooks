@@ -1,0 +1,20 @@
+{
+  "notification": {
+    "id": 17,
+    "user_id": 1,
+    "notification_type": 12,
+    "read": false,
+    "high_priority": false,
+    "created_at": "2026-01-03T04:17:47.896Z",
+    "post_number": null,
+    "topic_id": null,
+    "slug": null,
+    "data": {
+      "badge_id": 13,
+      "badge_name": "首次举报",
+      "badge_slug": "-",
+      "badge_title": false,
+      "username": "admin"
+    }
+  }
+}

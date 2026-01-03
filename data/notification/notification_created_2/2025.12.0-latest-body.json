@@ -1,0 +1,22 @@
+{
+  "notification": {
+    "fancy_title": "测试审核功能的通知话题话题话题话题话题话题话题",
+    "id": 18,
+    "user_id": 1,
+    "notification_type": 2,
+    "read": false,
+    "high_priority": false,
+    "created_at": "2026-01-03T04:34:34.451Z",
+    "post_number": 3,
+    "topic_id": 29,
+    "slug": "topic",
+    "data": {
+      "topic_title": "测试审核功能的通知话题话题话题话题话题话题话题",
+      "original_post_id": 74,
+      "original_post_type": 1,
+      "original_username": "xuxiaowei",
+      "revision_number": null,
+      "display_username": "xuxiaowei"
+    }
+  }
+}
