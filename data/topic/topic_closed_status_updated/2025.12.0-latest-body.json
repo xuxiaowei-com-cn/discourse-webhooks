@@ -1,0 +1,65 @@
+{
+  "topic": {
+    "tags": [
+      "seata"
+    ],
+    "tags_descriptions": {},
+    "fancy_title": "seata项目启动后无法访问",
+    "id": 129,
+    "title": "seata项目启动后无法访问",
+    "posts_count": 5,
+    "created_at": "2026-01-04T02:35:57.399Z",
+    "views": 3,
+    "reply_count": 1,
+    "like_count": 0,
+    "last_posted_at": "2026-01-04T03:30:58.357Z",
+    "visible": true,
+    "closed": true,
+    "archived": false,
+    "archetype": "regular",
+    "slug": "seata",
+    "category_id": 28,
+    "word_count": 54,
+    "deleted_at": null,
+    "user_id": 9,
+    "featured_link": null,
+    "pinned_globally": false,
+    "pinned_at": null,
+    "pinned_until": null,
+    "unpinned": null,
+    "pinned": false,
+    "highest_post_number": 5,
+    "deleted_by": null,
+    "has_deleted": false,
+    "bookmarked": false,
+    "participant_count": 2,
+    "queued_posts_count": 0,
+    "thumbnails": [
+      {
+        "max_width": null,
+        "max_height": null,
+        "width": 1920,
+        "height": 1074,
+        "url": "//xuxiaowei-io.oss-cn-hongkong.aliyuncs.com/original/1X/1f0534d09019de8b2afc1915dafff51e7b7d7ef2.jpeg"
+      }
+    ],
+    "created_by": {
+      "id": 9,
+      "username": "cute050",
+      "name": null,
+      "avatar_template": "/letter_avatar_proxy/v4/letter/c/8baadc/{size}.png"
+    },
+    "last_poster": {
+      "id": 1,
+      "username": "xuxiaowei",
+      "name": "徐晓伟",
+      "avatar_template": "/user_avatar/xuxiaowei.io/xuxiaowei/{size}/8_2.png"
+    },
+    "can_vote": false,
+    "vote_count": 0,
+    "user_voted": false,
+    "discourse_zendesk_plugin_zendesk_id": null,
+    "discourse_zendesk_plugin_zendesk_url": "https://your-url.zendesk.com/agent/tickets/",
+    "pending_posts": []
+  }
+}

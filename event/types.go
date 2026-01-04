@@ -16,6 +16,7 @@ const (
 	ReviewableCreated        Type = "reviewable_created"
 	ReviewableScoreUpdated   Type = "reviewable_score_updated"
 	ReviewableTransitionedTo Type = "reviewable_transitioned_to"
+	TopicClosedStatusUpdated Type = "topic_closed_status_updated"
 	TopicCreated             Type = "topic_created"
 	TopicEdited              Type = "topic_edited"
 	UserAddedToGroup         Type = "user_added_to_group"
