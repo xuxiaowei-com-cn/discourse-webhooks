@@ -185,6 +185,16 @@ var TemplateMap = map[Type]string{
 **状态转换时间**: {{FormatTime .Data.post_updated_at}}
 **当前状态**: {{.Data.status}}
 `,
+	TagCreated: `# Discourse 标签创建 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**标签 ID**: {{.Data.id}}
+**标签名称**: {{.Data.name}}
+**话题数量**: {{.Data.topic_count}}
+**人员标签**: {{.Data.staff}}
+**标签描述**: {{.Data.description}}
+`,
 	TopicClosedStatusUpdated: `# Discourse 话题关闭状态更新 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}
