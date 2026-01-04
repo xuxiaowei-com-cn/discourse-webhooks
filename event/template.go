@@ -1,7 +1,26 @@
 package event
 
 var TemplateMap = map[Type]string{
-	GroupUpdated: ``,
+	CategoryCreated: `# Discourse 分类创建 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**分类 ID**: {{.Data.id}}
+**分类名称**: {{.Data.name}}
+**分类 Slug**: {{.Data.slug}}
+**分类链接**: [{{.Header.Instance}}{{.Data.topic_url}}]({{.Header.Instance}}{{.Data.topic_url}})
+**话题数量**: {{.Data.topic_count}}
+**帖子数量**: {{.Data.post_count}}
+**分类颜色**: {{.Data.color}}
+**文字颜色**: {{.Data.text_color}}
+**分类位置**: {{.Data.position}}
+**父分类 ID**: {{.Data.parent_category_id}}
+**分类描述**: {{.Data.description}}
+**是否限制阅读**: {{.Data.read_restricted}}
+**是否允许徽章**: {{.Data.allow_badges}}
+**是否允许话题特色链接**: {{.Data.topic_featured_link_allowed}}
+`,
+	//GroupUpdated: ``,
 	NotificationCreated2: `# Discourse 通知创建 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}
