@@ -39,7 +39,23 @@ var TemplateMap = map[Type]string{
 **是否允许话题特色链接**: {{.Data.topic_featured_link_allowed}}
 **无法删除原因**: {{.Data.cannot_delete_reason}}
 `,
-	//GroupUpdated: ``,
+	GroupUpdated: `# Discourse 群组更新 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**群组 ID**: {{.Data.id}}
+**群组名称**: {{.Data.name}}
+**显示名称**: {{.Data.display_name}}
+**用户数量**: {{.Data.user_count}}
+**是否自动**: {{.Data.automatic}}
+**可见性级别**: {{.Data.visibility_level}}
+**是否主要群组**: {{.Data.primary_group}}
+**简介摘要**: {{.Data.bio_excerpt}}
+**是否允许成员请求**: {{.Data.allow_membership_requests}}
+**默认通知级别**: {{.Data.default_notification_level}}
+**是否可以查看成员**: {{.Data.can_see_members}}
+**是否可以管理群组**: {{.Data.can_admin_group}}
+`,
 	NotificationCreated2: `# Discourse 通知创建 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}
