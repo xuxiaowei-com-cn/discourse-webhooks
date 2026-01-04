@@ -20,7 +20,7 @@ var TemplateMap = map[Type]string{
 **原始帖子类型**: {{.Data.data.original_post_type}}
 **原始用户**: [{{.Header.Instance}}/u/{{.Data.data.original_username}}]({{.Header.Instance}}/u/{{.Data.data.original_username}})
 **修订版本号**: {{.Data.data.revision_number}}
-**显示用户**: [{{.Header.Instance}}/u/{{.Data.data.display_username}}]({{.Header.Instance}}/u/{{.Data.data.display_username}})
+**显示信息**: {{.Data.data.display_username}}
 `,
 	NotificationCreated6: `# Discourse 通知创建 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
