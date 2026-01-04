@@ -22,6 +22,26 @@ var TemplateMap = map[Type]string{
 **修订版本号**: {{.Data.data.revision_number}}
 **显示信息**: {{.Data.data.display_username}}
 `,
+	NotificationCreated4: `# Discourse 通知创建 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**通知标题**: {{.Data.fancy_title}}
+**通知 ID**: {{.Data.id}}
+**通知类型**: {{.Data.notification_type}}
+**阅读状态**: {{.Data.read}}
+**高优先级**: {{.Data.high_priority}}
+**创建时间**: {{FormatTime .Data.created_at}}
+**帖子编号**: {{.Data.post_number}}
+**话题 ID**: {{.Data.topic_id}}
+**话题标题**: {{.Data.data.topic_title}}
+**话题链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}]({{.Header.Instance}}/t/{{.Data.topic_id}})
+**原始帖子 ID**: {{.Data.data.original_post_id}}
+**原始帖子类型**: {{.Data.data.original_post_type}}
+**原始用户**: [{{.Header.Instance}}/u/{{.Data.data.original_username}}]({{.Header.Instance}}/u/{{.Data.data.original_username}})
+**修订版本号**: {{.Data.data.revision_number}}
+**显示用户**: [{{.Header.Instance}}/u/{{.Data.data.display_username}}]({{.Header.Instance}}/u/{{.Data.data.display_username}})
+`,
 	NotificationCreated6: `# Discourse 通知创建 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}

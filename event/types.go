@@ -7,6 +7,7 @@ type Type string
 const (
 	GroupUpdated             Type = "group_updated"
 	NotificationCreated2     Type = "notification_created2"
+	NotificationCreated4     Type = "notification_created4"
 	NotificationCreated6     Type = "notification_created6"
 	NotificationCreated12    Type = "notification_created12"
 	Ping                     Type = "ping"
