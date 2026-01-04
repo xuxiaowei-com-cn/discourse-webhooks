@@ -8,6 +8,7 @@ const (
 	CategoryCreated          Type = "category_created"
 	CategoryUpdated          Type = "category_updated"
 	GroupUpdated             Type = "group_updated"
+	NotificationCreated1     Type = "notification_created1"
 	NotificationCreated2     Type = "notification_created2"
 	NotificationCreated4     Type = "notification_created4"
 	NotificationCreated6     Type = "notification_created6"
