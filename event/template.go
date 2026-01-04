@@ -153,6 +153,16 @@ var TemplateMap = map[Type]string{
 **徽章标题**: {{.Data.data.badge_title}}
 **用户名**: [{{.Header.Instance}}/u/{{.Data.data.username}}]({{.Header.Instance}}/u/{{.Data.data.username}})
 `,
+	NotificationCreated38: `# Discourse 通知创建 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**通知 ID**: {{.Data.id}}
+**通知类型**: {{.Data.notification_type}}
+**阅读状态**: {{.Data.read}}
+**高优先级**: {{.Data.high_priority}}
+**创建时间**: {{FormatTime .Data.created_at}}
+`,
 	Ping: `# Discourse Ping 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}
