@@ -147,7 +147,7 @@ var TemplateMap = map[Type]string{
 **话题链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}]({{.Header.Instance}}/t/{{.Data.topic_id}})
 **帖子数量**: {{.Data.posts_count}}
 **帖子 ID**: {{.Data.id}}
-**帖子内容**: {{.Data.raw}}
+**帖子内容**: {{LimitLength .Data.raw}}
 **帖子链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}}]({{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}})
 **创建时间**: {{FormatTime .Data.created_at}}
 **作者 ID**: {{.Data.user_id}}
@@ -162,7 +162,7 @@ var TemplateMap = map[Type]string{
 **话题链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}]({{.Header.Instance}}/t/{{.Data.topic_id}})
 **帖子数量**: {{.Data.posts_count}}
 **帖子 ID**: {{.Data.id}}
-**帖子内容**: {{.Data.raw}}
+**帖子内容**: {{LimitLength .Data.raw}}
 **帖子链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}}]({{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}})
 **作者 ID**: {{.Data.user_id}}
 **作者姓名**: {{.Data.name}}
@@ -180,7 +180,7 @@ var TemplateMap = map[Type]string{
 **话题链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}]({{.Header.Instance}}/t/{{.Data.topic_id}})
 **帖子数量**: {{.Data.posts_count}}
 **帖子 ID**: {{.Data.id}}
-**帖子内容**: {{.Data.raw}}
+**帖子内容**: {{LimitLength .Data.raw}}
 **帖子链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}}]({{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}})
 **编辑时间**: {{FormatTime .Data.updated_at}}
 **作者 ID**: {{.Data.user_id}}
@@ -197,7 +197,7 @@ var TemplateMap = map[Type]string{
 **目标类型**: {{.Data.target_type}}
 **目标 ID**: {{.Data.target_id}}
 **目标链接**: [{{.Data.target_url}}]({{.Data.target_url}})
-**目标内容**: {{.Data.raw}}
+**目标内容**: {{LimitLength .Data.raw}}
 **目标时间**: {{FormatTime .Data.target_created_at}}
 **目标创建人ID**: {{.Data.target_created_by_id}}
 **审核 ID**: {{.Data.id}}
@@ -213,7 +213,7 @@ var TemplateMap = map[Type]string{
 **目标类型**: {{.Data.target_type}}
 **目标 ID**: {{.Data.target_id}}
 **目标链接**: [{{.Data.target_url}}]({{.Data.target_url}})
-**目标内容**: {{.Data.raw}}
+**目标内容**: {{LimitLength .Data.raw}}
 **目标时间**: {{FormatTime .Data.target_created_at}}
 **目标创建人ID**: {{.Data.target_created_by_id}}
 **审核 ID**: {{.Data.id}}
@@ -231,7 +231,7 @@ var TemplateMap = map[Type]string{
 **目标类型**: {{.Data.target_type}}
 **目标 ID**: {{.Data.target_id}}
 **目标链接**: [{{.Data.target_url}}]({{.Data.target_url}})
-**目标内容**: {{.Data.raw}}
+**目标内容**: {{LimitLength .Data.raw}}
 **目标时间**: {{FormatTime .Data.target_created_at}}
 **目标创建人ID**: {{.Data.target_created_by_id}}
 **审核 ID**: {{.Data.id}}

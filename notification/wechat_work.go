@@ -63,6 +63,39 @@ func FormatTime(args ...interface{}) template.HTML {
 	return template.HTML(localTime.Format(format))
 }
 
+// LimitLength 限制字符串长度，超过则添加省略号
+func LimitLength(args ...interface{}) template.HTML {
+	// 默认最大长度
+	defaultMaxLength := 1000
+
+	// 检查参数数量
+	if len(args) < 1 {
+		return ""
+	}
+
+	// 获取原始字符串
+	str, ok := args[0].(string)
+	if !ok {
+		return ""
+	}
+
+	// 获取最大长度，如果没有提供则使用默认值
+	maxLength := defaultMaxLength
+	if len(args) > 1 {
+		if ml, ok := args[1].(int); ok {
+			maxLength = ml
+		}
+	}
+
+	// 如果字符串长度小于等于最大长度，直接返回
+	if len(str) <= maxLength {
+		return template.HTML(str)
+	}
+
+	// 截断字符串并添加省略号
+	return template.HTML(str[:maxLength] + "...")
+}
+
 // sendWeChatWorkRequest 发送企业微信 webhook 请求并处理响应
 func sendWeChatWorkRequest(eventId, webhookURL string, message event.WeChatWorkMessage) error {
 	// 将消息转换为 JSON 格式
@@ -127,9 +160,10 @@ func renderTemplate(templateContent string, header event.Discourse, data interfa
 		tmplData.Data = dataMap
 	}
 
-	// 创建模板并注册 FormatTime 函数
+	// 创建模板并注册函数
 	tmpl, err := template.New("webhook").Funcs(template.FuncMap{
-		"FormatTime": FormatTime,
+		"FormatTime":  FormatTime,
+		"LimitLength": LimitLength,
 	}).Parse(templateContent)
 	if err != nil {
 		return "", errors.New(fmt.Sprintf("Error parsing template: %v", err))
