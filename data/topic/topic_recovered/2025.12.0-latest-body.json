@@ -1,0 +1,63 @@
+{
+  "topic": {
+    "tags": [],
+    "tags_descriptions": {},
+    "fancy_title": "测试文件上传阿里云对象储存 oss",
+    "id": 9,
+    "title": "测试文件上传阿里云对象储存 oss",
+    "posts_count": 1,
+    "created_at": "2025-12-31T03:01:40.833Z",
+    "views": 2,
+    "reply_count": 0,
+    "like_count": 0,
+    "last_posted_at": "2025-12-31T03:01:41.064Z",
+    "visible": true,
+    "closed": false,
+    "archived": false,
+    "archetype": "regular",
+    "slug": "oss",
+    "category_id": 3,
+    "word_count": 5,
+    "deleted_at": null,
+    "user_id": 1,
+    "featured_link": null,
+    "pinned_globally": false,
+    "pinned_at": null,
+    "pinned_until": null,
+    "unpinned": null,
+    "pinned": false,
+    "highest_post_number": 1,
+    "deleted_by": null,
+    "has_deleted": false,
+    "bookmarked": false,
+    "participant_count": 1,
+    "queued_posts_count": 0,
+    "thumbnails": [
+      {
+        "max_width": null,
+        "max_height": null,
+        "width": 640,
+        "height": 640,
+        "url": "//xuxiaowei-io.oss-cn-hongkong.aliyuncs.com/original/1X/aa340a786813d6e166573fc1339f69063090f522.jpeg"
+      }
+    ],
+    "created_by": {
+      "id": 1,
+      "username": "xuxiaowei",
+      "name": "徐晓伟",
+      "avatar_template": "/user_avatar/xuxiaowei.io/xuxiaowei/{size}/8_2.png"
+    },
+    "last_poster": {
+      "id": 1,
+      "username": "xuxiaowei",
+      "name": "徐晓伟",
+      "avatar_template": "/user_avatar/xuxiaowei.io/xuxiaowei/{size}/8_2.png"
+    },
+    "can_vote": false,
+    "vote_count": 0,
+    "user_voted": false,
+    "discourse_zendesk_plugin_zendesk_id": null,
+    "discourse_zendesk_plugin_zendesk_url": "https://your-url.zendesk.com/agent/tickets/",
+    "pending_posts": []
+  }
+}

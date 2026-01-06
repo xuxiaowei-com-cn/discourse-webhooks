@@ -28,6 +28,7 @@ const (
 	TopicCreated             Type = "topic_created"
 	TopicDestroyed           Type = "topic_destroyed"
 	TopicEdited              Type = "topic_edited"
+	TopicRecovered           Type = "topic_recovered"
 	UserAddedToGroup         Type = "user_added_to_group"
 	UserBadgeGranted         Type = "user_badge_granted"
 	UserConfirmedEmail       Type = "user_confirmed_email"
