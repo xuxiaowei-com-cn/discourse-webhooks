@@ -238,6 +238,31 @@ var TemplateMap = map[Type]string{
 **帖子链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}}]({{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}})
 **帖子内容**: {{LimitLength .Data.raw}}
 `,
+	PostLiked: `# Discourse 帖子点赞 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**话题 ID**: {{.Data.post.topic_id}}
+**话题标题**: {{.Data.post.topic_title}}
+**话题链接**: [{{.Header.Instance}}/t/{{.Data.post.topic_id}}]({{.Header.Instance}}/t/{{.Data.post.topic_id}})
+**帖子数量**: {{.Data.post.posts_count}}
+**点赞用户 ID**: {{.Data.user.id}}
+**点赞用户名**: [{{.Header.Instance}}/u/{{.Data.user.username}}]({{.Header.Instance}}/u/{{.Data.user.username}})
+**点赞用户姓名**: {{.Data.user.name}}
+**创建时间**: {{FormatTime .Data.post.created_at}}
+**更新时间**: {{FormatTime .Data.post.updated_at}}
+**回复数量**: {{.Data.post.reply_count}}
+**阅读次数**: {{.Data.post.reads}}
+**评   分**: {{.Data.post.score}}
+**帖子 ID**: {{.Data.post.id}}
+**帖子编号**: {{.Data.post.post_number}}
+**帖子类型**: {{.Data.post.post_type}}
+**帖子作者 ID**: {{.Data.post.user_id}}
+**帖子作者姓名**: {{.Data.post.name}}
+**帖子作者链接**: [{{.Header.Instance}}/u/{{.Data.post.username}}]({{.Header.Instance}}/u/{{.Data.post.username}})
+**帖子链接**: [{{.Header.Instance}}{{.Data.post.post_url}}]({{.Header.Instance}}{{.Data.post.post_url}})
+**帖子内容**: {{LimitLength .Data.post.raw}}
+`,
 	ReviewableCreated: `# Discourse 审核创建 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}

@@ -19,6 +19,7 @@ const (
 	PostCreated              Type = "post_created"
 	PostDestroyed            Type = "post_destroyed"
 	PostEdited               Type = "post_edited"
+	PostLiked                Type = "post_liked"
 	ReviewableCreated        Type = "reviewable_created"
 	ReviewableScoreUpdated   Type = "reviewable_score_updated"
 	ReviewableTransitionedTo Type = "reviewable_transitioned_to"
