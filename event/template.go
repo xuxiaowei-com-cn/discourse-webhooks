@@ -175,14 +175,14 @@ var TemplateMap = map[Type]string{
 **事件类型**: {{.Header.Event}}
 **话题标题**: {{.Data.topic_title}}
 **话题链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}]({{.Header.Instance}}/t/{{.Data.topic_id}})
-**帖子数量**: {{.Data.posts_count}}
-**帖子 ID**: {{.Data.id}}
-**帖子内容**: {{LimitLength .Data.raw}}
-**帖子链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}}]({{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}})
 **创建时间**: {{FormatTime .Data.created_at}}
 **作者 ID**: {{.Data.user_id}}
 **作者姓名**: {{.Data.name}}
 **作者链接**: [{{.Header.Instance}}/u/{{.Data.username}}]({{.Header.Instance}}/u/{{.Data.username}})
+**帖子数量**: {{.Data.posts_count}}
+**帖子 ID**: {{.Data.id}}
+**帖子链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}}]({{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}})
+**帖子内容**: {{LimitLength .Data.raw}}
 `,
 	PostDestroyed: `# Discourse 帖子删除 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
@@ -190,10 +190,6 @@ var TemplateMap = map[Type]string{
 **事件类型**: {{.Header.Event}}
 **话题标题**: {{.Data.topic_title}}
 **话题链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}]({{.Header.Instance}}/t/{{.Data.topic_id}})
-**帖子数量**: {{.Data.posts_count}}
-**帖子 ID**: {{.Data.id}}
-**帖子内容**: {{LimitLength .Data.raw}}
-**帖子链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}}]({{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}})
 **作者 ID**: {{.Data.user_id}}
 **作者姓名**: {{.Data.name}}
 **作者链接**: [{{.Header.Instance}}/u/{{.Data.username}}]({{.Header.Instance}}/u/{{.Data.username}})
@@ -201,6 +197,10 @@ var TemplateMap = map[Type]string{
 **删除人ID**: {{.Data.deleted_by.id}}
 **删除人名称**: {{.Data.deleted_by.name}}
 **删除人链接**: [{{.Header.Instance}}/u/{{.Data.deleted_by.username}}]({{.Header.Instance}}/u/{{.Data.deleted_by.username}})
+**帖子数量**: {{.Data.posts_count}}
+**帖子 ID**: {{.Data.id}}
+**帖子链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}}]({{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}})
+**帖子内容**: {{LimitLength .Data.raw}}
 `,
 	PostEdited: `# Discourse 帖子编辑 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
@@ -208,14 +208,14 @@ var TemplateMap = map[Type]string{
 **事件类型**: {{.Header.Event}}
 **话题标题**: {{.Data.topic_title}}
 **话题链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}]({{.Header.Instance}}/t/{{.Data.topic_id}})
-**帖子数量**: {{.Data.posts_count}}
-**帖子 ID**: {{.Data.id}}
-**帖子内容**: {{LimitLength .Data.raw}}
-**帖子链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}}]({{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}})
 **编辑时间**: {{FormatTime .Data.updated_at}}
 **作者 ID**: {{.Data.user_id}}
 **作者姓名**: {{.Data.name}}
 **作者链接**: [{{.Header.Instance}}/u/{{.Data.username}}]({{.Header.Instance}}/u/{{.Data.username}})
+**帖子数量**: {{.Data.posts_count}}
+**帖子 ID**: {{.Data.id}}
+**帖子链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}}]({{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}})
+**帖子内容**: {{LimitLength .Data.raw}}
 `,
 	ReviewableCreated: `# Discourse 审核创建 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
