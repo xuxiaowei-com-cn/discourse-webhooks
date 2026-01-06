@@ -26,6 +26,7 @@ const (
 	TagCreated               Type = "tag_created"
 	TopicClosedStatusUpdated Type = "topic_closed_status_updated"
 	TopicCreated             Type = "topic_created"
+	TopicDestroyed           Type = "topic_destroyed"
 	TopicEdited              Type = "topic_edited"
 	UserAddedToGroup         Type = "user_added_to_group"
 	UserBadgeGranted         Type = "user_badge_granted"
