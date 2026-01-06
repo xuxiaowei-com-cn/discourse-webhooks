@@ -263,6 +263,22 @@ var TemplateMap = map[Type]string{
 **帖子链接**: [{{.Header.Instance}}{{.Data.post.post_url}}]({{.Header.Instance}}{{.Data.post.post_url}})
 **帖子内容**: {{LimitLength .Data.post.raw}}
 `,
+	PostRecovered: `# Discourse 帖子恢复 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**话题标题**: {{.Data.topic_title}}
+**话题链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}]({{.Header.Instance}}/t/{{.Data.topic_id}})
+**创建时间**: {{FormatTime .Data.created_at}}
+**更新时间**: {{FormatTime .Data.updated_at}}
+**作者 ID**: {{.Data.user_id}}
+**作者姓名**: {{.Data.name}}
+**作者链接**: [{{.Header.Instance}}/u/{{.Data.username}}]({{.Header.Instance}}/u/{{.Data.username}})
+**帖子数量**: {{.Data.posts_count}}
+**帖子 ID**: {{.Data.id}}
+**帖子链接**: [{{.Header.Instance}}{{.Data.post_url}}]({{.Header.Instance}}{{.Data.post_url}})
+**帖子内容**: {{LimitLength .Data.raw}}
+`,
 	ReviewableCreated: `# Discourse 审核创建 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}
