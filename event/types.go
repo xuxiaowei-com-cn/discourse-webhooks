@@ -14,6 +14,7 @@ const (
 	NotificationCreated5     Type = "notification_created5"
 	NotificationCreated6     Type = "notification_created6"
 	NotificationCreated12    Type = "notification_created12"
+	NotificationCreated25    Type = "notification_created25"
 	NotificationCreated38    Type = "notification_created38"
 	Ping                     Type = "ping"
 	PostCreated              Type = "post_created"
