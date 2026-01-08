@@ -192,6 +192,23 @@ var TemplateMap = map[Type]string{
 **徽章标题**: {{.Data.data.badge_title}}
 **用户名**: [{{.Header.Instance}}/u/{{.Data.data.username}}]({{.Header.Instance}}/u/{{.Data.data.username}})
 `,
+	NotificationCreated14: `# Discourse 通知创建 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**通知标题**: {{.Data.fancy_title}}
+**通知 ID**: {{.Data.id}}
+**通知类型**: {{.Data.notification_type}}
+**阅读状态**: {{.Data.read}}
+**高优先级**: {{.Data.high_priority}}
+**创建时间**: {{FormatTime .Data.created_at}}
+**帖子编号**: {{.Data.post_number}}
+**话题 ID**: {{.Data.topic_id}}
+**话题标题**: {{.Data.data.topic_title}}
+**消息**: {{.Data.data.message}}
+**标题**: {{.Data.data.title}}
+**显示用户**: [{{.Header.Instance}}/u/{{.Data.data.display_username}}]({{.Header.Instance}}/u/{{.Data.data.display_username}})
+`,
 	NotificationCreated25: `# Discourse 通知创建 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}
