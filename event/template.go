@@ -1,6 +1,24 @@
 package event
 
 var TemplateMap = map[Type]string{
+	AcceptedSolution: `# Discourse 接受解决方案 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**话题标题**: {{.Data.topic_title}}
+**话题链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}]({{.Header.Instance}}/t/{{.Data.topic_id}})
+**话题 ID**: {{.Data.topic_id}}
+**帖子数量**: {{.Data.posts_count}}
+**帖子 ID**: {{.Data.id}}
+**帖子编号**: {{.Data.post_number}}
+**帖子链接**: [{{.Header.Instance}}{{.Data.post_url}}]({{.Header.Instance}}{{.Data.post_url}})
+**帖子内容**: {{LimitLength .Data.raw}}
+**用户 ID**: {{.Data.user_id}}
+**用户姓名**: {{.Data.name}}
+**用户链接**: [{{.Header.Instance}}/u/{{.Data.username}}]({{.Header.Instance}}/u/{{.Data.username}})
+**创建时间**: {{FormatTime .Data.created_at}}
+**更新时间**: {{FormatTime .Data.updated_at}}
+`,
 	CategoryCreated: `# Discourse 分类创建 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}
