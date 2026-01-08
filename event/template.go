@@ -468,6 +468,27 @@ var TemplateMap = map[Type]string{
 **帖子数量**: {{.Data.posts_count}}
 **浏览次数**: {{.Data.views}}
 `,
+	TopicPinnedStatusUpdated: `# Discourse 话题置顶状态更新 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**话题标题**: {{.Data.title}}
+**话题链接**: [{{.Header.Instance}}/t/{{.Data.id}}]({{.Header.Instance}}/t/{{.Data.id}})
+**话题 ID**: {{.Data.id}}
+**置顶状态**: {{.Data.pinned}}
+**置顶类型**: {{.Data.pinned_globally}}
+**创建时间**: {{FormatTime .Data.created_at}}
+**最后回复时间**: {{FormatTime .Data.last_posted_at}}
+**作者 ID**: {{.Data.created_by.id}}
+**作者姓名**: {{.Data.created_by.name}}
+**作者链接**: [{{.Header.Instance}}/u/{{.Data.created_by.username}}]({{.Header.Instance}}/u/{{.Data.created_by.username}})
+**最后回复者 ID**: {{.Data.last_poster.id}}
+**最后回复者姓名**: {{.Data.last_poster.name}}
+**最后回复者链接**: [{{.Header.Instance}}/u/{{.Data.last_poster.username}}]({{.Header.Instance}}/u/{{.Data.last_poster.username}})
+**帖子数量**: {{.Data.posts_count}}
+**浏览次数**: {{.Data.views}}
+**回复数量**: {{.Data.reply_count}}
+`,
 	TopicRecovered: `# Discourse 话题恢复 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}
