@@ -44,6 +44,7 @@ const (
 	UserLoggedIn             Type = "user_logged_in"
 	UserLoggedOut            Type = "user_logged_out"
 	UserUpdated              Type = "user_updated"
+	UserPromoted             Type = "user_promoted"
 )
 
 // WeChatWorkMessage 结构体用于存储企业微信 Webhook 消息格式
