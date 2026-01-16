@@ -83,3 +83,7 @@ make release
 | user         | user_logged_in              | ✅  | 用户登录     |
 | user         | user_logged_out             | ✅  | 用户退出     |
 | user         | user_updated                | ✅  | 用户更新     |
+
+## 联系我
+
+![wechat-work.jpg](static/wechat-work.jpg)
