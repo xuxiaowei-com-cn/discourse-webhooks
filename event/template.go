@@ -563,6 +563,19 @@ var TemplateMap = map[Type]string{
 **用户邮箱**: {{.Data.email}}
 **创建时间**: {{FormatTime .Data.created_at}}
 `,
+	UserDestroyed: `# Discourse 用户删除 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**用户 ID**: {{.Data.id}}
+**用户姓名**: {{.Data.name}}
+**用户链接**: [{{.Header.Instance}}/u/{{.Data.username}}]({{.Header.Instance}}/u/{{.Data.username}})
+**用户邮箱**: {{.Data.email}}
+**创建时间**: {{FormatTime .Data.created_at}}
+**最后活跃时间**: {{FormatTime .Data.last_seen_at}}
+**帖子数量**: {{.Data.post_count}}
+**徽章数量**: {{.Data.badge_count}}
+`,
 	UserLoggedIn: `# Discourse 用户登录 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}

@@ -81,6 +81,7 @@ make release
 | user_badge   | user_badge_revoked          | ✅  | 用户徽章撤销   |
 | user         | user_confirmed_email        | ✅  | 用户确认邮箱   |
 | user         | user_created                | ✅  | 用户创建     |
+| user         | user_destroyed              | ✅  | 用户删除     |
 | user         | user_logged_in              | ✅  | 用户登录     |
 | user         | user_logged_out             | ✅  | 用户退出     |
 | user         | user_updated                | ✅  | 用户更新     |

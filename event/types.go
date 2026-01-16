@@ -39,6 +39,7 @@ const (
 	UserBadgeRevoked         Type = "user_badge_revoked"
 	UserConfirmedEmail       Type = "user_confirmed_email"
 	UserCreated              Type = "user_created"
+	UserDestroyed            Type = "user_destroyed"
 	UserLoggedIn             Type = "user_logged_in"
 	UserLoggedOut            Type = "user_logged_out"
 	UserUpdated              Type = "user_updated"
