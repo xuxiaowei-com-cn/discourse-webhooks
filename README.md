@@ -70,6 +70,7 @@ make release
 | reviewable   | reviewable_score_updated    | ✅  | 审核分数更新   |
 | reviewable   | reviewable_transitioned_to  | ✅  | 审核状态转换   |
 | tag          | tag_created                 | ✅  | 标签创建     |
+| tag          | tag_destroyed               | ✅  | 标签删除     |
 | topic        | topic_closed_status_updated | ✅  | 话题关闭状态更新 |
 | topic        | topic_created               | ✅  | 话题创建     |
 | topic        | topic_destroyed             | ✅  | 话题删除     |

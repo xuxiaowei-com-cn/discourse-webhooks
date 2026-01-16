@@ -28,6 +28,7 @@ const (
 	ReviewableScoreUpdated   Type = "reviewable_score_updated"
 	ReviewableTransitionedTo Type = "reviewable_transitioned_to"
 	TagCreated               Type = "tag_created"
+	TagDestroyed             Type = "tag_destroyed"
 	TopicClosedStatusUpdated Type = "topic_closed_status_updated"
 	TopicCreated             Type = "topic_created"
 	TopicDestroyed           Type = "topic_destroyed"

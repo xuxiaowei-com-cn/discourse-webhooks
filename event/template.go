@@ -398,6 +398,16 @@ var TemplateMap = map[Type]string{
 **人员标签**: {{.Data.staff}}
 **标签描述**: {{.Data.description}}
 `,
+	TagDestroyed: `# Discourse 标签删除 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**标签 ID**: {{.Data.id}}
+**标签名称**: {{.Data.name}}
+**话题数量**: {{.Data.topic_count}}
+**人员标签**: {{.Data.staff}}
+**标签描述**: {{.Data.description}}
+`,
 	TopicClosedStatusUpdated: `# Discourse 话题关闭状态更新 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}
