@@ -26,4 +26,4 @@ deploy:
     - sleep 10
     - systemctl status discourse-webhooks --no-pager -l
   tags:
-    - aliyun-hk
+    - hk-shell
