@@ -532,6 +532,17 @@ var TemplateMap = map[Type]string{
 **授予时间**: {{FormatTime .Data.granted_at}}
 **创建时间**: {{FormatTime .Data.created_at}}
 `,
+	UserBadgeRevoked: `# Discourse 用户徽章撤销 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**徽章授予 ID**: {{.Data.id}}
+**徽章 ID**: {{.Data.badge_id}}
+**用户 ID**: {{.Data.user_id}}
+**授予人 ID**: {{.Data.granted_by_id}}
+**授予时间**: {{FormatTime .Data.granted_at}}
+**创建时间**: {{FormatTime .Data.created_at}}
+`,
 	UserConfirmedEmail: `# Discourse 用户确认邮箱 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}

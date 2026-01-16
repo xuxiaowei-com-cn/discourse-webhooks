@@ -36,6 +36,7 @@ const (
 	TopicRecovered           Type = "topic_recovered"
 	UserAddedToGroup         Type = "user_added_to_group"
 	UserBadgeGranted         Type = "user_badge_granted"
+	UserBadgeRevoked         Type = "user_badge_revoked"
 	UserConfirmedEmail       Type = "user_confirmed_email"
 	UserCreated              Type = "user_created"
 	UserLoggedIn             Type = "user_logged_in"

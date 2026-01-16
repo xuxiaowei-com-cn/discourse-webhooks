@@ -77,7 +77,8 @@ make release
 | topic        | topic_pinned_status_updated | ✅  | 话题置顶状态更新 |
 | topic        | topic_recovered             | ✅  | 话题恢复     |
 | group_user   | user_added_to_group         | ✅  | 用户加入群组   |
-| user         | user_badge_granted          | ✅  | 用户徽章授予   |
+| user_badge   | user_badge_granted          | ✅  | 用户徽章授予   |
+| user_badge   | user_badge_revoked          | ✅  | 用户徽章撤销   |
 | user         | user_confirmed_email        | ✅  | 用户确认邮箱   |
 | user         | user_created                | ✅  | 用户创建     |
 | user         | user_logged_in              | ✅  | 用户登录     |
