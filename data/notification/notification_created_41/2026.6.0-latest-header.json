@@ -1,0 +1,7 @@
+{
+  "UserAgent": "Discourse/2026.6.0-latest-2115f1cac5f9ddc192c469acc025bb2def4f106a; +https://www.discourse.org/",
+  "Instance": "https://xuxiaowei.io",
+  "EventId": "13966",
+  "EventType": "notification",
+  "Event": "notification_created"
+}

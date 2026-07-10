@@ -1,0 +1,30 @@
+{
+  "notification": {
+    "id": 369,
+    "user_id": 61,
+    "notification_type": 41,
+    "read": false,
+    "high_priority": false,
+    "created_at": "2026-06-26T16:46:07.607Z",
+    "post_number": null,
+    "topic_id": null,
+    "slug": null,
+    "data": {
+      "upcoming_change_names": [
+        "enable_auto_grid_images",
+        "enable_form_templates",
+        "impersonate_without_logout",
+        "rename_faq_to_guidelines",
+        "enable_new_defaults_for_trust_level_3_requirements"
+      ],
+      "upcoming_change_humanized_names": [
+        "Enable auto grid images",
+        "Enable form templates",
+        "Impersonate without logout",
+        "Rename FAQ to guidelines",
+        "Enable new defaults for trust level 3 requirements"
+      ],
+      "count": 6
+    }
+  }
+}
