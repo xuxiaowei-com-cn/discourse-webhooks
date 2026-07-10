@@ -1,0 +1,23 @@
+{
+  "notification": {
+    "fancy_title": "Anthropic Claude Code",
+    "id": 395,
+    "user_id": 143,
+    "notification_type": 3,
+    "read": false,
+    "high_priority": false,
+    "created_at": "2026-07-09T08:06:19.337Z",
+    "post_number": 3,
+    "topic_id": 662,
+    "slug": "anthropic-claude-code",
+    "data": {
+      "topic_title": "Anthropic Claude Code",
+      "original_post_id": 1123,
+      "original_post_type": 1,
+      "original_username": "xuxiaowei",
+      "revision_number": null,
+      "display_username": "xuxiaowei",
+      "display_name": "徐晓伟"
+    }
+  }
+}

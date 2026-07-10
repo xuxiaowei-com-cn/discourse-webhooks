@@ -11,6 +11,7 @@ const (
 	GroupUpdated             Type = "group_updated"
 	NotificationCreated1     Type = "notification_created1"
 	NotificationCreated2     Type = "notification_created2"
+	NotificationCreated3     Type = "notification_created3"
 	NotificationCreated4     Type = "notification_created4"
 	NotificationCreated5     Type = "notification_created5"
 	NotificationCreated6     Type = "notification_created6"
