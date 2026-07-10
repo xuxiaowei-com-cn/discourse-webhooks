@@ -1,0 +1,17 @@
+{
+  "notification": {
+    "fancy_title": "Anthropic Claude Code",
+    "id": 392,
+    "user_id": 143,
+    "notification_type": 20,
+    "read": false,
+    "high_priority": false,
+    "created_at": "2026-07-09T08:02:57.422Z",
+    "post_number": 2,
+    "topic_id": 662,
+    "slug": "anthropic-claude-code",
+    "data": {
+      "post_url": "/t/anthropic-claude-code/662/2"
+    }
+  }
+}
