@@ -1,0 +1,14 @@
+{
+  "notification": {
+    "id": 349,
+    "user_id": 61,
+    "notification_type": 37,
+    "read": false,
+    "high_priority": false,
+    "created_at": "2026-06-11T07:34:55.673Z",
+    "post_number": null,
+    "topic_id": null,
+    "slug": null,
+    "data": {}
+  }
+}
