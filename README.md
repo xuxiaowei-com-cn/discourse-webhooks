@@ -54,13 +54,18 @@ make release
 | group         | group_updated               | ✅  | 群组更新     |
 | notification  | notification_created1       | ✅  | 通知创建     |
 | notification  | notification_created2       | ✅  | 通知创建     |
+| notification  | notification_created3       | ✅  | 通知创建     |
 | notification  | notification_created4       | ✅  | 通知创建     |
 | notification  | notification_created5       | ✅  | 通知创建     |
 | notification  | notification_created6       | ✅  | 通知创建     |
 | notification  | notification_created12      | ✅  | 通知创建     |
 | notification  | notification_created14      | ✅  | 通知创建     |
+| notification  | notification_created20      | ✅  | 通知创建     |
 | notification  | notification_created25      | ✅  | 通知创建     |
+| notification  | notification_created37      | ✅  | 通知创建     |
 | notification  | notification_created38      | ✅  | 通知创建     |
+| notification  | notification_created41      | ✅  | 通知创建     |
+| notification  | notification_created42      | ✅  | 通知创建     |
 | post          | post_created                | ✅  | 帖子内容创建   |
 | post          | post_destroyed              | ✅  | 帖子删除     |
 | post          | post_edited                 | ✅  | 帖子编辑     |
@@ -71,6 +76,7 @@ make release
 | reviewable    | reviewable_transitioned_to  | ✅  | 审核状态转换   |
 | tag           | tag_created                 | ✅  | 标签创建     |
 | tag           | tag_destroyed               | ✅  | 标签删除     |
+| tag           | tag_updated                 | ✅  | 标签更新     |
 | topic         | topic_closed_status_updated | ✅  | 话题关闭状态更新 |
 | topic         | topic_created               | ✅  | 话题创建     |
 | topic         | topic_destroyed             | ✅  | 话题删除     |
