@@ -50,6 +50,7 @@ make release
 | ping           | ping                        | ✅   | 测试联通性       |
 | solved         | accepted_solution           | ✅   | 接受解决方案     |
 | calendar_event | calendar_event_created      | ✅   | 日历事件创建     |
+| calendar_event | calendar_event_updated      | ✅   | 日历事件更新     |
 | category       | category_created            | ✅   | 分类创建         |
 | category       | category_updated            | ✅   | 分类更新         |
 | group          | group_updated               | ✅   | 群组更新         |

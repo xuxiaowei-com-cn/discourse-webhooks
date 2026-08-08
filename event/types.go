@@ -7,6 +7,7 @@ type Type string
 const (
 	AcceptedSolution         Type = "accepted_solution"
 	CalendarEventCreated     Type = "calendar_event_created"
+	CalendarEventUpdated     Type = "calendar_event_updated"
 	CategoryCreated          Type = "category_created"
 	CategoryUpdated          Type = "category_updated"
 	GroupUpdated             Type = "group_updated"

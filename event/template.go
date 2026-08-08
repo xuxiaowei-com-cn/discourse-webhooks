@@ -41,6 +41,28 @@ var TemplateMap = map[Type]string{
 **是否关闭**: {{.Data.event.closed}}
 **允许群组**: {{range .Data.event.allowed_groups}}` + "`{{.}}`" + ` {{end}}
 `,
+	CalendarEventUpdated: `# Discourse 日历事件更新 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**话题标题**: {{.Data.topic.title}}
+**话题链接**: [{{.Data.topic.url}}]({{.Data.topic.url}})
+**话题 ID**: {{.Data.topic.id}}
+**分类 ID**: {{.Data.topic.category_id}}
+**标签**: {{range .Data.topic.tags}}` + "`{{.}}`" + ` {{end}}
+**日历事件 ID**: {{.Data.event.id}}
+**日历事件名称**: {{.Data.event.name}}
+**日历事件描述**: {{.Data.event.description}}
+**日历事件地点**: {{.Data.event.location}}
+**开始时间**: {{FormatTime .Data.event.starts_at}}
+**结束时间**: {{FormatTime .Data.event.ends_at}}
+**全天事件**: {{.Data.event.all_day}}
+**重复规则**: {{.Data.event.recurrence}}
+**时区**: {{.Data.event.timezone}}
+**状态**: {{.Data.event.status}}
+**是否关闭**: {{.Data.event.closed}}
+**允许群组**: {{range .Data.event.allowed_groups}}` + "`{{.}}`" + ` {{end}}
+`,
 	CategoryCreated: `# Discourse 分类创建 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}
