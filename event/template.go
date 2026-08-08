@@ -541,6 +541,16 @@ var TemplateMap = map[Type]string{
 **人员标签**: {{.Data.staff}}
 **标签描述**: {{.Data.description}}
 `,
+	TopicUnvote: `# Discourse 话题取消投票 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**话题 ID**: {{.Data.topic_id}}
+**话题 Slug**: {{.Data.topic_slug}}
+**话题链接**: [{{.Header.Instance}}/t/{{.Data.topic_slug}}/{{.Data.topic_id}}]({{.Header.Instance}}/t/{{.Data.topic_slug}}/{{.Data.topic_id}})
+**投票者 ID**: {{.Data.voter_id}}
+**投票数**: {{.Data.vote_count}}
+`,
 	TopicClosedStatusUpdated: `# Discourse 话题关闭状态更新 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}

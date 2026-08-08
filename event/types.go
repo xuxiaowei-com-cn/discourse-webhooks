@@ -37,6 +37,7 @@ const (
 	TagCreated               Type = "tag_created"
 	TagDestroyed             Type = "tag_destroyed"
 	TagUpdated               Type = "tag_updated"
+	TopicUnvote              Type = "topic_unvote"
 	TopicClosedStatusUpdated Type = "topic_closed_status_updated"
 	TopicCreated             Type = "topic_created"
 	TopicDestroyed           Type = "topic_destroyed"

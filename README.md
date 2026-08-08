@@ -85,6 +85,7 @@ make release
 | topic          | topic_edited                | ✅   | 话题编辑         |
 | topic          | topic_pinned_status_updated | ✅   | 话题置顶状态更新 |
 | topic          | topic_recovered             | ✅   | 话题恢复         |
+| topic_voting   | topic_unvote                | ✅   | 话题取消投票     |
 | group_user     | user_added_to_group         | ✅   | 用户加入群组     |
 | user_badge     | user_badge_granted          | ✅   | 用户徽章授予     |
 | user_badge     | user_badge_revoked          | ✅   | 用户徽章撤销     |
