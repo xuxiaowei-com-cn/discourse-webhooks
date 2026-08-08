@@ -1,0 +1,41 @@
+{
+  "calendar_event": {
+    "event": {
+      "id": 1266,
+      "name": null,
+      "description": "QQ 群：737797487",
+      "location": "https://live.bilibili.com/1754798211",
+      "url": null,
+      "status": "public",
+      "starts_at": "2026-08-16T06:00:00.000Z",
+      "ends_at": "2026-08-16T07:00:00.000Z",
+      "all_day": false,
+      "recurrence": "every_two_weeks",
+      "recurrence_until": null,
+      "timezone": "Asia/Shanghai",
+      "custom_fields": {},
+      "closed": false,
+      "max_attendees": null,
+      "chat_enabled": false,
+      "allowed_groups": [
+        "trust_level_0"
+      ],
+      "image": null
+    },
+    "post": {
+      "id": 1266,
+      "post_number": 1,
+      "url": "/t/loongarch/1032/1"
+    },
+    "topic": {
+      "id": 1032,
+      "title": "LoongArch 龙芯：双周会议",
+      "url": "https://xuxiaowei.io/t/loongarch/1032",
+      "category_id": 82,
+      "tags": [
+        "loong64",
+        "calendar"
+      ]
+    }
+  }
+}

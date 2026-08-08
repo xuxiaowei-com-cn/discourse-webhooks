@@ -6,6 +6,7 @@ type Type string
 // Discourse 事件类型常量
 const (
 	AcceptedSolution         Type = "accepted_solution"
+	CalendarEventCreated     Type = "calendar_event_created"
 	CategoryCreated          Type = "category_created"
 	CategoryUpdated          Type = "category_updated"
 	GroupUpdated             Type = "group_updated"
