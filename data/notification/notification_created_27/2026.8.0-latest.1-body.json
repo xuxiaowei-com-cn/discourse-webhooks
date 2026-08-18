@@ -1,0 +1,19 @@
+{
+  "notification": {
+    "fancy_title": "LoongArch 龙芯：双周会议",
+    "id": 464,
+    "user_id": 1,
+    "notification_type": 27,
+    "read": false,
+    "high_priority": false,
+    "created_at": "2026-08-15T06:00:59.451Z",
+    "post_number": 1,
+    "topic_id": 1032,
+    "slug": "loongarch",
+    "data": {
+      "topic_title": "LoongArch 龙芯：双周会议",
+      "display_username": "xuxiaowei",
+      "message": "discourse_post_event.notifications.before_event_reminder"
+    }
+  }
+}
