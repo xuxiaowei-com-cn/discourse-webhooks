@@ -1,0 +1,16 @@
+{
+  "notification": {
+    "id": 473,
+    "user_id": 61,
+    "notification_type": 8,
+    "read": false,
+    "high_priority": false,
+    "created_at": "2026-08-21T09:39:35.651Z",
+    "post_number": null,
+    "topic_id": null,
+    "slug": null,
+    "data": {
+      "display_username": "abc1"
+    }
+  }
+}

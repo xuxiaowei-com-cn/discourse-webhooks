@@ -242,6 +242,17 @@ var TemplateMap = map[Type]string{
 **显示名称**: {{.Data.data.display_name}}
 **群组名称**: {{.Data.data.group_name}}
 `,
+	NotificationCreated8: `# Discourse 通知创建 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**通知 ID**: {{.Data.id}}
+**通知类型**: {{.Data.notification_type}}
+**阅读状态**: {{.Data.read}}
+**高优先级**: {{.Data.high_priority}}
+**创建时间**: {{FormatTime .Data.created_at}}
+**显示用户**: [{{.Header.Instance}}/u/{{.Data.data.display_username}}]({{.Header.Instance}}/u/{{.Data.data.display_username}})
+`,
 	NotificationCreated12: `# Discourse 通知创建 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}
