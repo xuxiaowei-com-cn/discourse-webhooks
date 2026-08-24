@@ -1,0 +1,7 @@
+{
+  "UserAgent": "Discourse/2026.8.0-latest.1-739335d6d3999df0d82d67ea1035f2f57cbbed51; +https://www.discourse.org/",
+  "Instance": "https://xuxiaowei.io",
+  "EventId": "19269",
+  "EventType": "topic",
+  "Event": "topic_pinned_globally_status_updated"
+}
