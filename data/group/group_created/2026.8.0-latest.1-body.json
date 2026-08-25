@@ -1,0 +1,33 @@
+{
+  "group": {
+    "id": 40,
+    "automatic": false,
+    "name": "Honorary-Member",
+    "user_count": 0,
+    "mentionable_level": 0,
+    "messageable_level": 0,
+    "visibility_level": 0,
+    "primary_group": false,
+    "title": null,
+    "grant_trust_level": null,
+    "incoming_email": null,
+    "has_messages": false,
+    "flair_url": null,
+    "flair_bg_color": "",
+    "flair_color": "",
+    "bio_raw": null,
+    "bio_cooked": null,
+    "bio_excerpt": null,
+    "public_admission": false,
+    "public_exit": false,
+    "allow_membership_requests": false,
+    "full_name": "荣誉会员",
+    "default_notification_level": 3,
+    "membership_request_template": null,
+    "members_visibility_level": 0,
+    "can_see_members": true,
+    "can_admin_group": true,
+    "can_edit_group": true,
+    "publish_read_state": false
+  }
+}

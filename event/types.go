@@ -10,6 +10,7 @@ const (
 	CalendarEventUpdated             Type = "calendar_event_updated"
 	CategoryCreated                  Type = "category_created"
 	CategoryUpdated                  Type = "category_updated"
+	GroupCreated                     Type = "group_created"
 	GroupUpdated                     Type = "group_updated"
 	NotificationCreated1             Type = "notification_created1"
 	NotificationCreated2             Type = "notification_created2"
