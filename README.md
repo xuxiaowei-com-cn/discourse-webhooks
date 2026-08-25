@@ -93,6 +93,7 @@ make release
 | topic_voting   | topic_upvote                         | ✅   | 话题投票             |
 | topic_voting   | topic_unvote                         | ✅   | 话题取消投票         |
 | group_user     | user_added_to_group                  | ✅   | 用户加入群组         |
+| group_user     | user_removed_from_group              | ✅   | 用户移出群组         |
 | user_badge     | user_badge_granted                   | ✅   | 用户徽章授予         |
 | user_badge     | user_badge_revoked                   | ✅   | 用户徽章撤销         |
 | user           | user_confirmed_email                 | ✅   | 用户确认邮箱         |

@@ -770,6 +770,16 @@ var TemplateMap = map[Type]string{
 **通知级别**: {{.Data.notification_level}}
 **加入时间**: {{FormatTime .Data.created_at}}
 `,
+	UserRemovedFromGroup: `# Discourse 用户移出群组 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**用户 ID**: {{.Data.user_id}}
+**群组 ID**: {{.Data.group_id}}
+**唯一 ID**: {{.Data.id}}
+**通知级别**: {{.Data.notification_level}}
+**移出时间**: {{FormatTime .Data.created_at}}
+`,
 	UserBadgeGranted: `# Discourse 用户徽章授予 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}
