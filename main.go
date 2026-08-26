@@ -70,10 +70,33 @@ func respErr(w http.ResponseWriter, discourse *event.Discourse, err error) {
 	_, _ = w.Write([]byte(fmt.Sprintf(`%v`, err)))
 }
 
+// isPrivateMessage 判断 Webhook 数据是否为 private_message（私信）类型
+// topic 相关事件使用 archetype 字段，post 相关事件使用 topic_archetype 字段
+func isPrivateMessage(data interface{}) bool {
+	dataMap, ok := data.(map[string]interface{})
+	if !ok {
+		return false
+	}
+
+	// post 相关事件（post_*、post_liked、accepted_solution 等）使用 topic_archetype 字段
+	if v, ok := dataMap["topic_archetype"]; ok {
+		return v == "private_message"
+	}
+
+	// topic 相关事件（topic_*）使用 archetype 字段
+	if v, ok := dataMap["archetype"]; ok {
+		return v == "private_message"
+	}
+
+	return false
+}
+
 // webhookHandler 处理 Discourse 发送的 Webhook 请求
 // 参数：
 // - w: http.ResponseWriter，用于向客户端返回响应
 // - r: *http.Request，包含客户端发送的请求信息
+// - secret: HMAC-SHA256 签名密钥，为空代表不验证签名
+// - skipPrivateMessage: 是否跳过 private_message（私信）类型的话题/帖子通知
 // 功能：
 // 1. 验证请求方法是否为 POST
 // 2. 解析 URL 路径获取平台和 Key
@@ -81,7 +104,7 @@ func respErr(w http.ResponseWriter, discourse *event.Discourse, err error) {
 // 4. 读取并记录请求体
 // 5. 解析请求体中的用户数据
 // 6. 返回 200 OK 响应
-func webhookHandler(w http.ResponseWriter, r *http.Request, secret string) {
+func webhookHandler(w http.ResponseWriter, r *http.Request, secret string, skipPrivateMessage bool) {
 	// 只允许 POST 请求，其他方法返回 405 Method Not Allowed
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -203,6 +226,17 @@ func webhookHandler(w http.ResponseWriter, r *http.Request, secret string) {
 
 	data, _ := genericPayload[discourse.EventType]
 
+	// 根据配置跳过 private_message（私信）类型的话题/帖子通知
+	if skipPrivateMessage && isPrivateMessage(data) {
+		log.Printf("%s: Skipped private message webhook", discourse.EventId)
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("X-Event-Id", discourse.EventId)
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte("ok: private message skipped"))
+		return
+	}
+
 	// 发送 Webhook 消息
 	if err := sender.Send(*discourse, data, key); err != nil {
 		respErr(w, discourse, err)
@@ -221,13 +255,13 @@ func webhookHandler(w http.ResponseWriter, r *http.Request, secret string) {
 }
 
 // StartCommand 启动 HTTP 服务器
-func StartCommand(port int, secret string) error {
+func StartCommand(port int, secret string, skipPrivateMessage bool) error {
 	// 设置日志格式，包含标准时间戳和文件名行号
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
 	// 注册 Webhook 处理函数到 "/webhook/" 路径，支持路径参数 key
 	http.HandleFunc("/webhook/", func(writer http.ResponseWriter, request *http.Request) {
-		webhookHandler(writer, request, secret)
+		webhookHandler(writer, request, secret, skipPrivateMessage)
 	})
 
 	// 构建服务器地址，格式为 ":端口号"
@@ -265,12 +299,19 @@ func main() {
 				Value:    "",
 				Required: false,
 			},
+			&cli.BoolFlag{
+				Name:     "skip-private-message",
+				Usage:    "跳过 private_message（私信）类型的话题/帖子相关 Webhook 通知",
+				Value:    false,
+				Required: false,
+			},
 		},
 		Action: func(_ context.Context, cmd *cli.Command) error {
 			fmt.Println("欢迎使用 Discourse Webhook 企业微信通知服务")
 			var port = cmd.Int("port")
 			var secret = cmd.String("secret")
-			return StartCommand(port, secret)
+			var skipPrivateMessage = cmd.Bool("skip-private-message")
+			return StartCommand(port, secret, skipPrivateMessage)
 		},
 		Metadata: map[string]interface{}{
 			"projectUrl": ProjectUrl,

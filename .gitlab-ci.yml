@@ -14,7 +14,7 @@ deploy:
       Description=
       After=network.target
       [Service]
-      ExecStart=/srv/discourse-webhooks --port=61122
+      ExecStart=/srv/discourse-webhooks --port=61122 --skip-private-message
       Restart=always
       RestartSec=10s
       [Install]
