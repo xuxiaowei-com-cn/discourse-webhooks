@@ -9,6 +9,7 @@ const (
 	CalendarEventCreated             Type = "calendar_event_created"
 	CalendarEventUpdated             Type = "calendar_event_updated"
 	CategoryCreated                  Type = "category_created"
+	CategoryDestroyed                Type = "category_destroyed"
 	CategoryUpdated                  Type = "category_updated"
 	GroupCreated                     Type = "group_created"
 	GroupUpdated                     Type = "group_updated"

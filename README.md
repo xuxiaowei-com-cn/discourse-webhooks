@@ -60,6 +60,7 @@ make release
 | calendar_event | calendar_event_created               | ✅   | 日历事件创建         |
 | calendar_event | calendar_event_updated               | ✅   | 日历事件更新         |
 | category       | category_created                     | ✅   | 分类创建             |
+| category       | category_destroyed                   | ✅   | 分类删除             |
 | category       | category_updated                     | ✅   | 分类更新             |
 | group          | group_created                        | ✅   | 群组创建             |
 | group          | group_updated                        | ✅   | 群组更新             |
