@@ -27,7 +27,7 @@ deploy:
     - sleep 10
     - systemctl status discourse-webhooks --no-pager -l
   tags:
-    - hk-shell
+    - jp-shell
 
 sync-github:
   stage: sync
@@ -55,4 +55,4 @@ sync-github:
       when: never
     - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == null && $ENABLE_SYNC == "true"
   tags:
-    - hk-shell
+    - jp-shell
