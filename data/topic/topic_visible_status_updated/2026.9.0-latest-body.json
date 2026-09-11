@@ -1,0 +1,97 @@
+{
+  "topic": {
+    "tags": [
+      {
+        "id": 236,
+        "name": "release",
+        "slug": "release"
+      },
+      {
+        "id": 10,
+        "name": "oauth2",
+        "slug": "oauth2"
+      },
+      {
+        "id": 175,
+        "name": "basic",
+        "slug": "basic"
+      },
+      {
+        "id": 173,
+        "name": "artifact-gateway",
+        "slug": "artifact-gateway"
+      },
+      {
+        "id": 174,
+        "name": "authorization_code",
+        "slug": "authorization-code"
+      }
+    ],
+    "tags_descriptions": {},
+    "fancy_title": "产物网关 artifact-gateway：基于 spring-cloud-gateway，支持 OAuth2 authorization_code、Basic 等协议",
+    "id": 817,
+    "title": "产物网关 artifact-gateway：基于 spring-cloud-gateway，支持 OAuth2 authorization_code、Basic 等协议",
+    "posts_count": 1,
+    "created_at": "2026-06-17T06:16:37.631Z",
+    "views": 39,
+    "reply_count": 0,
+    "like_count": 0,
+    "last_posted_at": "2026-06-17T06:16:37.769Z",
+    "visible": false,
+    "closed": false,
+    "archived": false,
+    "archetype": "regular",
+    "slug": "artifact-gateway-spring-cloud-gateway-oauth2-authorization-code-basic",
+    "category_id": 50,
+    "word_count": 1424,
+    "deleted_at": null,
+    "user_id": 1,
+    "featured_link": null,
+    "pinned_globally": false,
+    "pinned_at": null,
+    "pinned_until": null,
+    "visibility_reason_id": 3,
+    "unpinned": null,
+    "pinned": false,
+    "highest_post_number": 2,
+    "deleted_by": null,
+    "has_deleted": false,
+    "bookmarked": false,
+    "participant_count": 1,
+    "queued_posts_count": 0,
+    "thumbnails": null,
+    "created_by": {
+      "id": 1,
+      "username": "xuxiaowei",
+      "name": "徐晓伟",
+      "avatar_template": "/user_avatar/xuxiaowei.io/xuxiaowei/{size}/1267_2.png"
+    },
+    "last_poster": {
+      "id": 1,
+      "username": "xuxiaowei",
+      "name": "徐晓伟",
+      "avatar_template": "/user_avatar/xuxiaowei.io/xuxiaowei/{size}/1267_2.png"
+    },
+    "summarizable": false,
+    "has_cached_summary": false,
+    "can_assign": true,
+    "has_livestream": null,
+    "valid_reactions": [
+      "heart",
+      "+1",
+      "laughing",
+      "open_mouth",
+      "clap",
+      "confetti_ball",
+      "hugs"
+    ],
+    "can_create_shared_issue": false,
+    "shared_issue_visible": false,
+    "can_vote": false,
+    "vote_count": 0,
+    "user_voted": false,
+    "discourse_zendesk_plugin_zendesk_id": null,
+    "discourse_zendesk_plugin_zendesk_url": "https://your-url.zendesk.com/agent/tickets/",
+    "pending_posts": []
+  }
+}

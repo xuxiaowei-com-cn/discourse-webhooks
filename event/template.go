@@ -795,6 +795,37 @@ var TemplateMap = map[Type]string{
 **字数**: {{.Data.word_count}}
 **参与人数**: {{.Data.participant_count}}
 `,
+	TopicVisibleStatusUpdated: `# Discourse 话题可见状态更新 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**话题标题**: {{.Data.title}}
+**话题链接**: [{{.Header.Instance}}/t/{{.Data.slug}}/{{.Data.id}}]({{.Header.Instance}}/t/{{.Data.slug}}/{{.Data.id}})
+**话题 ID**: {{.Data.id}}
+**话题 Slug**: {{.Data.slug}}
+**话题状态**: {{.Data.archetype}}
+**可见状态**: {{.Data.visible}}
+**可见原因 ID**: {{.Data.visibility_reason_id}}
+**分类 ID**: {{.Data.category_id}}
+**标签**: {{range .Data.tags}}` + "`{{.name}}`" + ` {{end}}
+**关闭状态**: {{.Data.closed}}
+**归档状态**: {{.Data.archived}}
+**帖子数量**: {{.Data.posts_count}}
+**最高帖子编号**: {{.Data.highest_post_number}}
+**浏览次数**: {{.Data.views}}
+**回复数量**: {{.Data.reply_count}}
+**点赞数量**: {{.Data.like_count}}
+**字数**: {{.Data.word_count}}
+**参与人数**: {{.Data.participant_count}}
+**创建时间**: {{FormatTime .Data.created_at}}
+**最后回复时间**: {{FormatTime .Data.last_posted_at}}
+**作者 ID**: {{.Data.created_by.id}}
+**作者姓名**: {{.Data.created_by.name}}
+**作者链接**: [{{.Header.Instance}}/u/{{.Data.created_by.username}}]({{.Header.Instance}}/u/{{.Data.created_by.username}})
+**最后回复者 ID**: {{.Data.last_poster.id}}
+**最后回复者姓名**: {{.Data.last_poster.name}}
+**最后回复者链接**: [{{.Header.Instance}}/u/{{.Data.last_poster.username}}]({{.Header.Instance}}/u/{{.Data.last_poster.username}})
+`,
 	UserAddedToGroup: `# Discourse 用户加入群组 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}

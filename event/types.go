@@ -52,6 +52,7 @@ const (
 	TopicPinnedStatusUpdated         Type = "topic_pinned_status_updated"
 	TopicPinnedGloballyStatusUpdated Type = "topic_pinned_globally_status_updated"
 	TopicRecovered                   Type = "topic_recovered"
+	TopicVisibleStatusUpdated        Type = "topic_visible_status_updated"
 	UserAddedToGroup                 Type = "user_added_to_group"
 	UserRemovedFromGroup             Type = "user_removed_from_group"
 	UserBadgeGranted                 Type = "user_badge_granted"

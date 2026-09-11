@@ -100,6 +100,7 @@ make release
 | topic          | topic_pinned_globally_status_updated | ✅   | 话题全局置顶状态更新 |
 | topic          | topic_pinned_status_updated          | ✅   | 话题置顶状态更新     |
 | topic          | topic_recovered                      | ✅   | 话题恢复             |
+| topic          | topic_visible_status_updated         | ✅   | 话题可见状态更新     |
 | topic_voting   | topic_upvote                         | ✅   | 话题投票             |
 | topic_voting   | topic_unvote                         | ✅   | 话题取消投票         |
 | group_user     | user_added_to_group                  | ✅   | 用户加入群组         |
