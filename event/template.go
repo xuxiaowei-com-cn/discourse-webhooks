@@ -868,6 +868,24 @@ var TemplateMap = map[Type]string{
 **授予时间**: {{FormatTime .Data.granted_at}}
 **创建时间**: {{FormatTime .Data.created_at}}
 `,
+	UserApproved: `# Discourse 用户审核通过 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**用户 ID**: {{.Data.id}}
+**用户姓名**: {{.Data.name}}
+**用户链接**: [{{.Header.Instance}}/u/{{.Data.username}}]({{.Header.Instance}}/u/{{.Data.username}})
+**用户邮箱**: {{.Data.email}}
+**信任等级**: {{.Data.trust_level}}
+**管理员**: {{.Data.admin}}
+**版  主**: {{.Data.moderator}}
+**注册时间**: {{FormatTime .Data.created_at}}
+**最后活跃时间**: {{FormatTime .Data.last_seen_at}}
+**最后发帖时间**: {{FormatTime .Data.last_posted_at}}
+**帖子数量**: {{.Data.post_count}}
+**话题数量**: {{.Data.topic_count}}
+**徽章数量**: {{.Data.badge_count}}
+`,
 	UserConfirmedEmail: `# Discourse 用户确认邮箱 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}

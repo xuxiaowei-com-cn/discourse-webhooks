@@ -107,6 +107,7 @@ make release
 | group_user     | user_removed_from_group              | ✅   | 用户移出群组         |
 | user_badge     | user_badge_granted                   | ✅   | 用户徽章授予         |
 | user_badge     | user_badge_revoked                   | ✅   | 用户徽章撤销         |
+| user           | user_approved                        | ✅   | 用户审核通过         |
 | user           | user_confirmed_email                 | ✅   | 用户确认邮箱         |
 | user           | user_created                         | ✅   | 用户创建             |
 | user           | user_destroyed                       | ✅   | 用户删除             |

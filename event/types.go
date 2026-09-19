@@ -54,6 +54,7 @@ const (
 	TopicRecovered                   Type = "topic_recovered"
 	TopicVisibleStatusUpdated        Type = "topic_visible_status_updated"
 	UserAddedToGroup                 Type = "user_added_to_group"
+	UserApproved                     Type = "user_approved"
 	UserRemovedFromGroup             Type = "user_removed_from_group"
 	UserBadgeGranted                 Type = "user_badge_granted"
 	UserBadgeRevoked                 Type = "user_badge_revoked"
