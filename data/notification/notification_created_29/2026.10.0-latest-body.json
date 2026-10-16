@@ -1,0 +1,21 @@
+{
+  "notification": {
+    "id": 644,
+    "user_id": 233,
+    "notification_type": 29,
+    "read": false,
+    "high_priority": true,
+    "created_at": "2026-10-16T02:11:23.954Z",
+    "post_number": null,
+    "topic_id": null,
+    "slug": null,
+    "data": {
+      "chat_message_id": 4,
+      "chat_channel_id": 2,
+      "mentioned_by_username": "xuxiaowei",
+      "is_direct_message_channel": false,
+      "chat_channel_title": "常规",
+      "chat_channel_slug": ""
+    }
+  }
+}
