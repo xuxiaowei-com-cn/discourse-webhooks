@@ -62,6 +62,7 @@ make release
 | category       | category_created                     | ✅   | 分类创建             |
 | category       | category_destroyed                   | ✅   | 分类删除             |
 | category       | category_updated                     | ✅   | 分类更新             |
+| chat_message   | chat_message_created                 | ✅   | 聊天消息创建         |
 | group          | group_created                        | ✅   | 群组创建             |
 | group          | group_updated                        | ✅   | 群组更新             |
 | notification   | notification_created1                | ✅   | 通知创建             |

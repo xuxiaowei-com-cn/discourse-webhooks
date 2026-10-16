@@ -63,6 +63,28 @@ var TemplateMap = map[Type]string{
 **是否关闭**: {{.Data.event.closed}}
 **允许群组**: {{range .Data.event.allowed_groups}}` + "`{{.}}`" + ` {{end}}
 `,
+	ChatMessageCreated: `# Discourse 聊天消息创建 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**聊天频道 ID**: {{.Data.channel.id}}
+**聊天频道名称**: {{.Data.channel.title}}
+**聊天频道链接**: [{{.Header.Instance}}{{.Data.channel.chatable_url}}]({{.Header.Instance}}{{.Data.channel.chatable_url}})
+**聊天频道状态**: {{.Data.channel.status}}
+**聊天频道成员数量**: {{.Data.channel.memberships_count}}
+**聊天频道类型**: {{.Data.channel.chatable_type}}
+**消息 ID**: {{.Data.message.id}}
+**消息内容**: {{LimitLength .Data.message.message}}
+**消息摘要**: {{LimitLength .Data.message.excerpt}}
+**消息 HTML**: {{LimitLength .Data.message.cooked}}
+**发送时间**: {{FormatTime .Data.message.created_at}}
+**发送者 ID**: {{.Data.message.user.id}}
+**发送者姓名**: {{.Data.message.user.name}}
+**发送者链接**: [{{.Header.Instance}}/u/{{.Data.message.user.username}}]({{.Header.Instance}}/u/{{.Data.message.user.username}})
+**发送者管理员**: {{.Data.message.user.admin}}
+**发送者版  主**: {{.Data.message.user.moderator}}
+**提及用户**: {{range .Data.message.mentioned_users}}` + "`{{.username}}`" + ` {{end}}
+`,
 	CategoryCreated: `# Discourse 分类创建 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}

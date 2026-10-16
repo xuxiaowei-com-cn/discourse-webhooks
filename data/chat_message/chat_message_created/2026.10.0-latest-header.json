@@ -1,0 +1,7 @@
+{
+  "UserAgent": "Discourse/2026.10.0-latest-b9f5e76cc179d1e1ac8ad5e05dbe4ec01184d925; +https://www.discourse.org/",
+  "Instance": "https://xuxiaowei.io",
+  "EventId": "26585",
+  "EventType": "chat_message",
+  "Event": "chat_message_created"
+}

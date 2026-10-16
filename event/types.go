@@ -11,6 +11,7 @@ const (
 	CategoryCreated                  Type = "category_created"
 	CategoryDestroyed                Type = "category_destroyed"
 	CategoryUpdated                  Type = "category_updated"
+	ChatMessageCreated               Type = "chat_message_created"
 	GroupCreated                     Type = "group_created"
 	GroupUpdated                     Type = "group_updated"
 	NotificationCreated1             Type = "notification_created1"
