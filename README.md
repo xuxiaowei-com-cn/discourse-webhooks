@@ -75,6 +75,7 @@ make release
 | notification   | notification_created8                | ✅   | 通知创建             |
 | notification   | notification_created12               | ✅   | 通知创建             |
 | notification   | notification_created14               | ✅   | 通知创建             |
+| notification   | notification_created16               | ✅   | 通知创建             |
 | notification   | notification_created20               | ✅   | 通知创建             |
 | notification   | notification_created25               | ✅   | 通知创建             |
 | notification   | notification_created27               | ✅   | 通知创建             |

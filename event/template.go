@@ -360,6 +360,20 @@ var TemplateMap = map[Type]string{
 **标题**: {{.Data.data.title}}
 **显示用户**: [{{.Header.Instance}}/u/{{.Data.data.display_username}}]({{.Header.Instance}}/u/{{.Data.data.display_username}})
 `,
+	NotificationCreated16: `# Discourse 通知创建 事件通知
+**实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
+**事件 ID**: {{.Header.EventId}}
+**事件类型**: {{.Header.Event}}
+**通知 ID**: {{.Data.id}}
+**通知类型**: {{.Data.notification_type}}
+**阅读状态**: {{.Data.read}}
+**高优先级**: {{.Data.high_priority}}
+**创建时间**: {{FormatTime .Data.created_at}}
+**群组 ID**: {{.Data.data.group_id}}
+**群组名称**: {{.Data.data.group_name}}
+**未读消息数量**: {{.Data.data.inbox_count}}
+**用户名**: [{{.Header.Instance}}/u/{{.Data.data.username}}]({{.Header.Instance}}/u/{{.Data.data.username}})
+`,
 	NotificationCreated20: `# Discourse 通知创建 事件通知
 **实例地址**: [{{.Header.Instance}}]({{.Header.Instance}})
 **事件 ID**: {{.Header.EventId}}

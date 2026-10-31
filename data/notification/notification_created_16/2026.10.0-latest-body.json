@@ -1,0 +1,19 @@
+{
+  "notification": {
+    "id": 734,
+    "user_id": 1,
+    "notification_type": 16,
+    "read": false,
+    "high_priority": false,
+    "created_at": "2026-10-23T15:46:15.240Z",
+    "post_number": null,
+    "topic_id": null,
+    "slug": null,
+    "data": {
+      "group_id": 2,
+      "group_name": "moderators",
+      "inbox_count": 1,
+      "username": "xuxiaowei"
+    }
+  }
+}
