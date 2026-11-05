@@ -545,9 +545,13 @@ var TemplateMap = map[Type]string{
 **作者姓名**: {{.Data.name}}
 **作者链接**: [{{.Header.Instance}}/u/{{.Data.username}}]({{.Header.Instance}}/u/{{.Data.username}})
 **删除时间**: {{FormatTime .Data.deleted_at}}
-**删除人ID**: {{.Data.deleted_by.id}}
-**删除人名称**: {{.Data.deleted_by.name}}
-**删除人链接**: [{{.Header.Instance}}/u/{{.Data.deleted_by.username}}]({{.Header.Instance}}/u/{{.Data.deleted_by.username}})
+{{- with .Data.deleted_by}}
+**删除人ID**: {{.id}}
+**删除人名称**: {{.name}}
+**删除人链接**: [{{$.Header.Instance}}/u/{{.username}}]({{$.Header.Instance}}/u/{{.username}})
+{{- else}}
+**删除人**: 未知（Discourse 未记录删除人）
+{{- end}}
 **帖子数量**: {{.Data.posts_count}}
 **帖子 ID**: {{.Data.id}}
 **帖子链接**: [{{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}}]({{.Header.Instance}}/t/{{.Data.topic_id}}/{{.Data.post_number}})
@@ -754,9 +758,13 @@ var TemplateMap = map[Type]string{
 **作者 ID**: {{.Data.created_by.id}}
 **作者姓名**: {{.Data.created_by.name}}
 **作者链接**: [{{.Header.Instance}}/u/{{.Data.created_by.username}}]({{.Header.Instance}}/u/{{.Data.created_by.username}})
-**删除人 ID**: {{.Data.deleted_by.id}}
-**删除人姓名**: {{.Data.deleted_by.name}}
-**删除人链接**: [{{.Header.Instance}}/u/{{.Data.deleted_by.username}}]({{.Header.Instance}}/u/{{.Data.deleted_by.username}})
+{{- with .Data.deleted_by}}
+**删除人 ID**: {{.id}}
+**删除人姓名**: {{.name}}
+**删除人链接**: [{{$.Header.Instance}}/u/{{.username}}]({{$.Header.Instance}}/u/{{.username}})
+{{- else}}
+**删除人**: 未知（Discourse 未记录删除人）
+{{- end}}
 **最后回复者 ID**: {{.Data.last_poster.id}}
 **最后回复者姓名**: {{.Data.last_poster.name}}
 **最后回复者链接**: [{{.Header.Instance}}/u/{{.Data.last_poster.username}}]({{.Header.Instance}}/u/{{.Data.last_poster.username}})

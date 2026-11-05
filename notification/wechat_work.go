@@ -139,6 +139,42 @@ func sendWeChatWorkRequest(eventId, webhookURL string, message event.WeChatWorkM
 	return fmt.Errorf("%s", string(respBody))
 }
 
+// nullValue 表示 Webhook 数据中的 JSON null
+//
+// 如果直接使用 nil 参与模板渲染，模板访问其字段（如 {{.Data.deleted_by.id}}）会返回
+// “nil pointer evaluating interface {}.id” 错误，导致整条通知发送失败。
+// 将 null 替换为 nullValue 后：
+//   - 访问任意字段都返回空字符串，不再中断模板执行；
+//   - 在 {{if}}、{{with}} 中仍然为假；
+//   - 在 {{range}} 中不产生任何循环；
+//   - 直接输出时通过 String 方法输出空字符串（而不是 map[]）。
+type nullValue map[string]interface{}
+
+// String 实现 fmt.Stringer，使 null 直接输出为空字符串
+func (nullValue) String() string { return "" }
+
+// normalizeNull 递归地将数据中的 nil（JSON null）替换为 nullValue
+func normalizeNull(data interface{}) interface{} {
+	switch value := data.(type) {
+	case map[string]interface{}:
+		m := make(map[string]interface{}, len(value))
+		for k, v := range value {
+			m[k] = normalizeNull(v)
+		}
+		return m
+	case []interface{}:
+		s := make([]interface{}, len(value))
+		for i, v := range value {
+			s[i] = normalizeNull(v)
+		}
+		return s
+	case nil:
+		return nullValue{}
+	default:
+		return value
+	}
+}
+
 // renderTemplate 根据模板和数据渲染消息内容
 func renderTemplate(templateContent string, header event.Discourse, data interface{}) (string, error) {
 	// 准备模板渲染所需的数据
@@ -157,7 +193,7 @@ func renderTemplate(templateContent string, header event.Discourse, data interfa
 			json.Unmarshal(jsonData, &dataMap)
 		}
 
-		tmplData.Data = dataMap
+		tmplData.Data = normalizeNull(dataMap)
 	}
 
 	// 创建模板并注册函数
@@ -177,6 +213,18 @@ func renderTemplate(templateContent string, header event.Discourse, data interfa
 	return buf.String(), nil
 }
 
+// templateFor 根据事件类型获取对应的模板内容
+// notification_created 事件需要再根据 notification_type 区分不同模板
+func templateFor(header event.Discourse, data interface{}) string {
+	if header.EventType == "notification" && header.Event == "notification_created" {
+		if dataMap, ok := data.(map[string]interface{}); ok {
+			notificationType := fmt.Sprintf("%v", dataMap["notification_type"])
+			return event.TemplateMap[event.Type(header.Event+notificationType)]
+		}
+	}
+	return event.TemplateMap[event.Type(header.Event)]
+}
+
 func (s *WeChatWorkSender) Send(header event.Discourse, data interface{}, key string) error {
 	// 使用动态 key 构建企业微信 Webhook 地址
 	webhookURL := fmt.Sprintf("%s?key=%s", WeChatAPI, key)
@@ -186,14 +234,7 @@ func (s *WeChatWorkSender) Send(header event.Discourse, data interface{}, key st
 		MsgType: "markdown",
 	}
 
-	var templateContent string
-	if header.EventType == "notification" && header.Event == "notification_created" {
-		dataMap := data.(map[string]interface{})
-		notificationType := fmt.Sprintf("%v", dataMap["notification_type"])
-		templateContent = event.TemplateMap[event.Type(header.Event+notificationType)]
-	} else {
-		templateContent = event.TemplateMap[event.Type(header.Event)]
-	}
+	templateContent := templateFor(header, data)
 
 	if templateContent == "" {
 		return errors.New(fmt.Sprintf("the %s template string was not found", header.Event))

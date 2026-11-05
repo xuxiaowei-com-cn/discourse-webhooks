@@ -1,0 +1,7 @@
+{
+  "UserAgent": "Discourse/2026.11.0-latest-efdaacf92b0cbd4ea1a590b0c42904b1736c3ffd; +https://www.discourse.org/",
+  "Instance": "https://xuxiaowei.io",
+  "EventId": "30625",
+  "EventType": "topic",
+  "Event": "topic_destroyed"
+}
