@@ -55,4 +55,4 @@ sync-github:
       when: never
     - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == null && $ENABLE_SYNC == "true"
   tags:
-    - jp-shell
+    - sh-shell-2
