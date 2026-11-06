@@ -27,7 +27,7 @@ deploy:
     - sleep 10
     - systemctl status discourse-webhooks --no-pager -l
   tags:
-    - jp-shell
+    - sh-shell-2
 
 sync-github:
   stage: sync
